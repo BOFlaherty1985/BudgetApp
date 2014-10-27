@@ -20,6 +20,7 @@ public class BudgetClient {
         Budget budget = budgetFactory.requestBudgetType("ANNUAL");
         budget.buildBudget();
 
+        System.out.println(budget.toString());
     }
 
 }

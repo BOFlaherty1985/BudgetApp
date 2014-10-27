@@ -27,6 +27,16 @@ public class SocialBudgetItem implements BudgetItem {
         // call SocialBudgetItemBuilder
     }
 
+    @Override
+    public void setItemDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public void setItemMonetaryAmount(BigDecimal moneySpent) {
+        this.moneySpent = moneySpent;
+    }
+
     public String toString() {
         return "";
     }

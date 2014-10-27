@@ -2,6 +2,9 @@ package main.java.budgetapp.budget.monthly;
 
 import main.java.budgetapp.budget.Budget;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * Monthly Budget Object.
  *
@@ -13,7 +16,12 @@ public class MonthlyBudget extends Budget {
 
     @Override
     public void buildBudget() {
-        System.out.println("MONTHLY BUDGET CREATED");
+
+        // TODO - form object from the user to be passed into the buildBudget method to create the object.
+        this.description = "Monthly Budget";
+        this.salary = new BigDecimal("20000");
+        this.submittedOn = new Date();
+
     }
 
 }

@@ -1,5 +1,7 @@
 package main.java.budgetapp.budget.items;
 
+import java.math.BigDecimal;
+
 /**
  * Budget Item Interface.
  *
@@ -10,6 +12,8 @@ package main.java.budgetapp.budget.items;
 public interface BudgetItem {
 
     void buildBudgetItem();
+    void setItemDescription(String description);
+    void setItemMonetaryAmount(BigDecimal moneySpent);
     public String toString();
 
 }

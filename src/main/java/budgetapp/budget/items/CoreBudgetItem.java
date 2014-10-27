@@ -24,6 +24,16 @@ public class CoreBudgetItem implements BudgetItem {
         // call CoreBudgetItemBuilder
     }
 
+    @Override
+    public void setItemDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public void setItemMonetaryAmount(BigDecimal moneySpent) {
+        this.moneySpent = moneySpent;
+    }
+
     public String toString() {
         return "";
     }
