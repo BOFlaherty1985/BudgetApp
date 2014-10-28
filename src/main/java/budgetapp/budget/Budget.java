@@ -27,7 +27,7 @@ public abstract class Budget {
         this.submittedOn = submittedOn;
     }
 
-    protected abstract void buildBudget();
+    public abstract void buildBudget();
 
     protected List<CoreBudgetItem> coreBudgetItemList;
     protected List<SocialBudgetItem> socialBudgetItemList;

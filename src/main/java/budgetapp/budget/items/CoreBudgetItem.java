@@ -34,8 +34,13 @@ public class CoreBudgetItem implements BudgetItem {
         this.moneySpent = moneySpent;
     }
 
+
+    @Override
     public String toString() {
-        return "";
+        return "CoreBudgetItem{" +
+                "description='" + description + '\'' +
+                ", moneySpent=" + moneySpent +
+                '}';
     }
 
 }

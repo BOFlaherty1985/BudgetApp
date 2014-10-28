@@ -18,14 +18,14 @@ public class MonthlyBudget extends Budget {
     public MonthlyBudget(String description, BigDecimal salary, Date submittedOn) {
         super(description, salary, submittedOn);
 
-        // build the budget object
-        buildBudget();
     }
 
     @Override
     public void buildBudget() {
         // TODO - form object from the user to be passed into the buildBudget method to create the object.
-        setTestValue("TESTING");
+        this.setTestValue("TESTING");
+        this.setCoreBudgetItemList(null);
+        this.setSocialBudgetItemList(null);
     }
 
 }

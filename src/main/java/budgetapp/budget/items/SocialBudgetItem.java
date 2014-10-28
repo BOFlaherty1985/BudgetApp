@@ -37,8 +37,13 @@ public class SocialBudgetItem implements BudgetItem {
         this.moneySpent = moneySpent;
     }
 
+    @Override
     public String toString() {
-        return "";
+        return "SocialBudgetItem{" +
+                "dateOfEvent=" + dateOfEvent +
+                ", description='" + description + '\'' +
+                ", moneySpent=" + moneySpent +
+                '}';
     }
 
 }

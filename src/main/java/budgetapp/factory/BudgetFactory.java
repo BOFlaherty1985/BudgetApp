@@ -16,7 +16,7 @@ public abstract class BudgetFactory {
     /**
      * Client request entry point
      */
-    public Budget requestBudgetType(String budget_choice) {
+    public Budget requestBudgetByType(String budget_choice) {
         return createBudget(budget_choice);
     }
 
