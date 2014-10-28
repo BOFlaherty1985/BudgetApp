@@ -1,8 +1,11 @@
 package main.java.budgetapp.budget;
 
-import java.util.Date;
+import main.java.budgetapp.budget.items.CoreBudgetItem;
+import main.java.budgetapp.budget.items.SocialBudgetItem;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Budget Object.
@@ -16,8 +19,18 @@ public abstract class Budget {
     protected String description;
     protected BigDecimal salary;
     protected Date submittedOn;
+    protected String testValue;
 
-    public abstract void buildBudget();
+    public Budget(String description, BigDecimal salary, Date submittedOn) {
+        this.description = description;
+        this.salary = salary;
+        this.submittedOn = submittedOn;
+    }
+
+    protected abstract void buildBudget();
+
+    protected List<CoreBudgetItem> coreBudgetItemList;
+    protected List<SocialBudgetItem> socialBudgetItemList;
 
     public String getDescription() {
         return description;
@@ -43,12 +56,41 @@ public abstract class Budget {
         this.submittedOn = submittedOn;
     }
 
+    public List<CoreBudgetItem> getCoreBudgetItemList() {
+        return coreBudgetItemList;
+    }
+
+    public void setCoreBudgetItemList(List<CoreBudgetItem> coreBudgetItemList) {
+        this.coreBudgetItemList = coreBudgetItemList;
+    }
+
+    public List<SocialBudgetItem> getSocialBudgetItemList() {
+        return socialBudgetItemList;
+    }
+
+    public void setSocialBudgetItemList(List<SocialBudgetItem> socialBudgetItemList) {
+        this.socialBudgetItemList = socialBudgetItemList;
+    }
+
+    // TODO - remove after testing value can be set
+    public String getTestValue() {
+        return testValue;
+    }
+
+    public void setTestValue(String testValue) {
+        this.testValue = testValue;
+    }
+
     @Override
     public String toString() {
         return "Budget{" +
                 "description='" + description + '\'' +
                 ", salary=" + salary +
                 ", submittedOn=" + submittedOn +
+                ", testValue='" + testValue + '\'' +
+                ", coreBudgetItemList=" + coreBudgetItemList +
+                ", socialBudgetItemList=" + socialBudgetItemList +
                 '}';
     }
+
 }

@@ -4,6 +4,9 @@ import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.monthly.MonthlyBudget;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * Monthly Budget Implementation.
  *
@@ -15,8 +18,10 @@ public class CreateBudget extends BudgetFactory {
 
     @Override
     protected Budget createBudget(String budget_choice) {
-        return (budget_choice.equals(ANNUAL_BUDGET)) ? new AnnualBudget() :
-                new MonthlyBudget();
+        // TODO - refactor budget object creation constructor input(s)
+        return (budget_choice.equals(ANNUAL_BUDGET)) ?
+                new AnnualBudget("annual budget", new BigDecimal("30000"), new Date()) :
+                new MonthlyBudget("monthly budget", new BigDecimal("20000"), new Date());
     }
 
 }

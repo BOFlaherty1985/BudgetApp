@@ -17,9 +17,8 @@ public class BudgetClient {
 
     public static void main(String[] args) {
 
-        Budget budget = budgetFactory.requestBudgetType("ANNUAL");
-        budget.buildBudget();
-
+        // TODO - mock a form object of user data to build a budget object (TDD)
+        Budget budget = budgetFactory.requestBudgetType("MONTHLY");
         System.out.println(budget.toString());
     }
 
