@@ -73,9 +73,9 @@ public class CalculateBudgetBreakdownTest {
     /*
         Validate incoming budget item to ensure that the necessary data is contained within the object
 
-            - Test that the the object contains a Salary value, throw SalaryNotFoundException.
-            - Test that the list of CoreBudgetItems is not empty or null, throw BudgetItemsEmptyException.
-            - Test that the list of SocialBudgetItems is not empty or null, throw BudgetItemsEmptyException.
+        - Test that the the object contains a Salary value, throw SalaryNotFoundException.
+        - Test that the list of CoreBudgetItems is not empty or null, throw BudgetItemsEmptyException.
+        - Test that the list of SocialBudgetItems is not empty or null, throw BudgetItemsEmptyException.
     */
 
     @Test

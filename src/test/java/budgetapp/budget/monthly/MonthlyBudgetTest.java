@@ -12,7 +12,7 @@ import org.junit.Test;
 public class MonthlyBudgetTest {
 
     @Test
-    private void testCase() {
+    public void testCase() {
 
     }
 

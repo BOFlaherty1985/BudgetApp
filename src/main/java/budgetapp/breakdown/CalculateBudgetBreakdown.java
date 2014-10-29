@@ -38,10 +38,10 @@ public class CalculateBudgetBreakdown {
         breakdown.setBudgetType(determineTypeOfBudget(budget));
 
         // calculate the sub total of core budget items
-        breakdown.setTotalCoreBudget(calculateBudgetItemsSubTotal(budget, budget.getCoreBudgetItemList()));
+        breakdown.setTotalCoreBudget(calculateBudgetItemsSubTotal(budget.getCoreBudgetItemList()));
 
         // calculate the sub total of social budget items
-        breakdown.setTotalSocialBudget(calculateBudgetItemsSubTotal(budget, budget.getSocialBudgetItemList()));
+        breakdown.setTotalSocialBudget(calculateBudgetItemsSubTotal(budget.getSocialBudgetItemList()));
 
         return breakdown;
     }
@@ -95,13 +95,11 @@ public class CalculateBudgetBreakdown {
         return (budget instanceof AnnualBudget) ? ANNUAL_BUDGET : MONTHLY_BUDGET;
     }
 
-
     /**
      * calculates the total value of the a given budgetItemList.
-     * @param budget
      * @return
      */
-    private BigDecimal calculateBudgetItemsSubTotal(Budget budget, List budgetItemsList) {
+    private BigDecimal calculateBudgetItemsSubTotal(List budgetItemsList) {
 
         BigDecimal subTotal = new BigDecimal(BigInteger.ZERO);
 
