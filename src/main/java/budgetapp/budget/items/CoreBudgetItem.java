@@ -34,6 +34,13 @@ public class CoreBudgetItem implements BudgetItem {
         this.moneySpent = moneySpent;
     }
 
+    public BigDecimal getMoneySpent() {
+        return moneySpent;
+    }
+
+    public void setMoneySpent(BigDecimal moneySpent) {
+        this.moneySpent = moneySpent;
+    }
 
     @Override
     public String toString() {

@@ -37,6 +37,10 @@ public class SocialBudgetItem implements BudgetItem {
         this.moneySpent = moneySpent;
     }
 
+    public BigDecimal getMoneySpent() {
+        return moneySpent;
+    }
+
     @Override
     public String toString() {
         return "SocialBudgetItem{" +

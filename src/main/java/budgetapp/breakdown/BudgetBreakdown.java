@@ -1,5 +1,7 @@
 package main.java.budgetapp.breakdown;
 
+import java.math.BigDecimal;
+
 /**
  * Budget Breakdown
  *
@@ -10,7 +12,8 @@ package main.java.budgetapp.breakdown;
 public class BudgetBreakdown {
 
     private String budgetType;
-    private Object coreItemsTotal;
+    private BigDecimal totalCoreBudget;
+    private BigDecimal totalSocialBudget;
 
     public String getBudgetType() {
         return budgetType;
@@ -20,11 +23,19 @@ public class BudgetBreakdown {
         this.budgetType = budgetType;
     }
 
-    public Object getCoreItemsTotal() {
-        return coreItemsTotal;
+    public BigDecimal getTotalCoreBudget() {
+        return totalCoreBudget;
     }
 
-    public void setCoreItemsTotal(Object coreItemsTotal) {
-        this.coreItemsTotal = coreItemsTotal;
+    public void setTotalCoreBudget(BigDecimal totalCoreBudget) {
+        this.totalCoreBudget = totalCoreBudget;
+    }
+
+    public BigDecimal getTotalSocialBudget() {
+        return totalSocialBudget;
+    }
+
+    public void setTotalSocialBudget(BigDecimal totalSocialBudget) {
+        this.totalSocialBudget = totalSocialBudget;
     }
 }
