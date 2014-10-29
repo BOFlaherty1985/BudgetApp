@@ -14,6 +14,7 @@ public interface BudgetItem {
     void buildBudgetItem();
     void setItemDescription(String description);
     void setItemMonetaryAmount(BigDecimal moneySpent);
+    BigDecimal getItemMonetaryAmount();
     public String toString();
 
 }

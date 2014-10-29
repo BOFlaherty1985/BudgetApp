@@ -2,13 +2,13 @@ package main.java.budgetapp.breakdown;
 
 import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
-import main.java.budgetapp.budget.items.CoreBudgetItem;
-import main.java.budgetapp.budget.items.SocialBudgetItem;
+import main.java.budgetapp.budget.items.BudgetItem;
 import main.java.budgetapp.exceptions.BudgetItemsMissingException;
 import main.java.budgetapp.exceptions.SalaryNotFoundException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * Calculate Budget Breakdown
@@ -38,10 +38,10 @@ public class CalculateBudgetBreakdown {
         breakdown.setBudgetType(determineTypeOfBudget(budget));
 
         // calculate the sub total of core budget items
-        breakdown.setTotalCoreBudget(calculateCoreItemsSubTotal(budget));
+        breakdown.setTotalCoreBudget(calculateBudgetItemsSubTotal(budget, budget.getCoreBudgetItemList()));
 
         // calculate the sub total of social budget items
-        breakdown.setTotalSocialBudget(calculateSocialItemsSubTotal(budget));
+        breakdown.setTotalSocialBudget(calculateBudgetItemsSubTotal(budget, budget.getSocialBudgetItemList()));
 
         return breakdown;
     }
@@ -95,38 +95,24 @@ public class CalculateBudgetBreakdown {
         return (budget instanceof AnnualBudget) ? ANNUAL_BUDGET : MONTHLY_BUDGET;
     }
 
+
     /**
-     * calculates the total value of the CoreBudgetItemsList.
-     *
+     * calculates the total value of the a given budgetItemList.
      * @param budget
      * @return
      */
-    private BigDecimal calculateCoreItemsSubTotal(Budget budget) {
+    private BigDecimal calculateBudgetItemsSubTotal(Budget budget, List budgetItemsList) {
 
-        BigDecimal totalCoreBudgetItems = new BigDecimal(BigInteger.ZERO);
+        BigDecimal subTotal = new BigDecimal(BigInteger.ZERO);
 
-        for(CoreBudgetItem budgetItem : budget.getCoreBudgetItemList()) {
-            totalCoreBudgetItems = totalCoreBudgetItems.add(budgetItem.getMoneySpent());
+        for(Object budgetObject : budgetItemsList) {
+
+            BudgetItem budgetItem = (BudgetItem) budgetObject;
+            subTotal = subTotal.add(budgetItem.getItemMonetaryAmount());
+
         }
 
-        return totalCoreBudgetItems;
-    }
-
-    /**
-     * calculates the total value of the SocialBudgetItemsList
-     *
-     * @param budget
-     * @return
-     */
-    private BigDecimal calculateSocialItemsSubTotal(Budget budget) {
-
-        BigDecimal totalSocialBudgetItems = new BigDecimal(BigInteger.ZERO);
-
-        for(SocialBudgetItem socialBudgetItem : budget.getSocialBudgetItemList()) {
-            totalSocialBudgetItems = totalSocialBudgetItems.add(socialBudgetItem.getMoneySpent());
-        }
-
-        return totalSocialBudgetItems;
+        return subTotal;
     }
 
 }
