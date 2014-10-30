@@ -14,6 +14,8 @@ public class BudgetBreakdown {
     private String budgetType;
     private BigDecimal totalCoreBudget;
     private BigDecimal totalSocialBudget;
+    private BigDecimal totalMoneyAvailable;
+    private BigDecimal totalOfAllBudgetItems;
 
     public String getBudgetType() {
         return budgetType;
@@ -38,4 +40,32 @@ public class BudgetBreakdown {
     public void setTotalSocialBudget(BigDecimal totalSocialBudget) {
         this.totalSocialBudget = totalSocialBudget;
     }
+
+    public BigDecimal getTotalMoneyAvailable() {
+        return totalMoneyAvailable;
+    }
+
+    public void setTotalMoneyAvailable(BigDecimal totalMoneyAvailable) {
+        this.totalMoneyAvailable = totalMoneyAvailable;
+    }
+
+    public BigDecimal getTotalOfAllBudgetItems() {
+        return totalOfAllBudgetItems;
+    }
+
+    public void setTotalOfAllBudgetItems(BigDecimal totalOfAllBudgetItems) {
+        this.totalOfAllBudgetItems = totalOfAllBudgetItems;
+    }
+
+    @Override
+    public String toString() {
+        return "BudgetBreakdown{" +
+                "budgetType='" + budgetType + '\'' +
+                ", totalCoreBudget=" + totalCoreBudget +
+                ", totalSocialBudget=" + totalSocialBudget +
+                ", totalMoneyAvailable=" + totalMoneyAvailable +
+                ", totalOfAllBudgetItems=" + totalOfAllBudgetItems +
+                '}';
+    }
+
 }

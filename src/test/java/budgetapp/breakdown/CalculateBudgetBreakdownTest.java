@@ -2,6 +2,7 @@ package test.java.budgetapp.breakdown;
 
 import main.java.budgetapp.breakdown.BudgetBreakdown;
 import main.java.budgetapp.breakdown.CalculateBudgetBreakdown;
+import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.items.CoreBudgetItem;
 import main.java.budgetapp.budget.items.SocialBudgetItem;
@@ -36,9 +37,8 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void isBudgetBreakdownNotNull() throws Exception {
 
-        AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("20000"));
-        annualBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
-        annualBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
+        AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
+        defaultBudgetItemLists(annualBudget);
 
         BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
         assertNotNull("BudgetBreakdown is not null", breakdown);
@@ -50,8 +50,7 @@ public class CalculateBudgetBreakdownTest {
     public void isAnnualBudgetItemAcceptedInCalculateBudgetMethod() throws Exception {
 
         AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("20000"));
-        annualBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
-        annualBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
+        defaultBudgetItemLists(annualBudget);
 
         BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
         assertEquals("BudgetBreakdown budgetType equals ANNUAL", breakdown.getBudgetType(), "ANNUAL");
@@ -61,9 +60,7 @@ public class CalculateBudgetBreakdownTest {
     public void isMonthlyBudgetItemAcceptedInCalculateBudgetMethod() throws Exception {
 
         MonthlyBudget monthlyBudget = createMonthlyBudget();
-        monthlyBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
-        monthlyBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
-
+        defaultBudgetItemLists(monthlyBudget);
 
         BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
         assertEquals("BudgetBreakdown budgetType equals MONTHLY", breakdown.getBudgetType(), "MONTHLY");
@@ -82,7 +79,7 @@ public class CalculateBudgetBreakdownTest {
     public void budgetDoesNotContainAValidSalaryValue() throws Exception {
 
         // salary value is null
-        AnnualBudget annualBudget = createAnnualBudget("Annual Budget", null);
+        Budget annualBudget = createAnnualBudget("Annual Budget", null);
 
         try {
             calculateBudgetBreakdown.calculateBreakdown(annualBudget);
@@ -97,7 +94,7 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void coreBudgetItemsListIsNullWithinBudgetObject() throws Exception {
 
-        MonthlyBudget monthlyBudget = createMonthlyBudget();
+        Budget monthlyBudget = createMonthlyBudget();
 
         try {
             calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
@@ -111,7 +108,7 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void socialBudgetItemsListIsNullWithinBudgetObject() throws Exception {
 
-        MonthlyBudget monthlyBudget = createMonthlyBudget();
+        Budget monthlyBudget = createMonthlyBudget();
         monthlyBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
 
         try {
@@ -143,24 +140,20 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void isTotalCoreBudgetNotNull() throws Exception {
 
-        AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("50000"));
-        annualBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
-        annualBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
+        Budget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("5000"));
+        defaultBudgetItemLists(annualBudget);
 
         BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-
         assertNotNull("totalCoreBudget is not null.", budgetBreakdown.getTotalCoreBudget());
     }
 
     @Test
     public void totalCoreBudgetIsEqualToDefaultValueOfZero() throws Exception {
 
-        AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("50000"));
-        annualBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
-        annualBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
+        Budget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("50000"));
+        defaultBudgetItemLists(annualBudget);
 
         BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-
         assertEquals("totalCoreBudget is not equal to default value of ZERO.", budgetBreakdown.getTotalCoreBudget(),
                 new BigDecimal(BigInteger.ZERO));
 
@@ -169,7 +162,7 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void totalCoreBudgetIsEqualTo800() throws Exception {
 
-        AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("50000"));
+        Budget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("5000"));
 
         List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
         coreBudgetItemList.add(new CoreBudgetItem("Core Item #1", new BigDecimal("800")));
@@ -178,7 +171,6 @@ public class CalculateBudgetBreakdownTest {
         annualBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
 
         BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-
         assertEquals("totalCoreBudget is not equal to 800.", budgetBreakdown.getTotalCoreBudget(),
                 new BigDecimal("800"));
 
@@ -187,12 +179,10 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void isTotalSocialBudgetNotNull() throws Exception {
 
-        MonthlyBudget monthlyBudget = createMonthlyBudget();
-        monthlyBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
-        monthlyBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
+        Budget monthlyBudget = createMonthlyBudget();
+        defaultBudgetItemLists(monthlyBudget);
 
         BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
-
         assertNotNull("totalSocialBudget is not null", budgetBreakdown.getTotalSocialBudget());
 
     }
@@ -200,12 +190,10 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void totalSocialBudgetIsEqualToDefaultValueOfZero() throws Exception {
 
-        MonthlyBudget monthlyBudget = createMonthlyBudget();
-        monthlyBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
-        monthlyBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
+        Budget monthlyBudget = createMonthlyBudget();
+        defaultBudgetItemLists(monthlyBudget);
 
         BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
-
         assertEquals("totalSocialBudget is not equal to Zero.", budgetBreakdown.getTotalSocialBudget(),
                 new BigDecimal(BigInteger.ZERO));
 
@@ -214,7 +202,7 @@ public class CalculateBudgetBreakdownTest {
     @Test
     public void totalSocialBudgetIsEqualTo500() throws Exception {
 
-        MonthlyBudget monthlyBudget = createMonthlyBudget();
+        Budget monthlyBudget = createMonthlyBudget();
         monthlyBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
 
         List<SocialBudgetItem> socialBudgetItemList = new ArrayList<SocialBudgetItem>();
@@ -224,7 +212,6 @@ public class CalculateBudgetBreakdownTest {
         monthlyBudget.setSocialBudgetItemList(socialBudgetItemList);
 
         BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
-
         assertEquals("totalSocialBudget is not equal to Zero.", budgetBreakdown.getTotalSocialBudget(),
                 new BigDecimal("500"));
 
@@ -242,24 +229,162 @@ public class CalculateBudgetBreakdownTest {
         - Test that BudgetBreakdown contains a value for 'totalMoneyAvailableWeekly', result must not be empty or null.
     */
 
+    @Test
+    public void budgetBreakdownContainsTypeOfBudgetDescription() throws Exception {
 
-//    @Test
-//    public void isBudgetBreakdownContainSumOfCoreItemsValue() {
-//
-//        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown();
-//        assertNotNull("BudgetBreakdown contains SumOfCoreItems", breakdown.getCoreItemsTotal());
-//
-//    }
+        Budget budget = createMonthlyBudget();
+        defaultBudgetItemLists(budget);
 
+        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertNotNull("BudgetBreakdown contains typeOfBudget description.", breakdown.getBudgetType());
+    }
+
+    @Test
+    public void budgetBreakdownContainsSumOfCoreItemsValue() throws Exception {
+
+        Budget budget = createMonthlyBudget();
+        defaultBudgetItemLists(budget);
+
+        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertNotNull("BudgetBreakdown contains SumOfCoreItems.", breakdown.getTotalCoreBudget());
+
+    }
+
+    @Test
+    public void budgetBreakdownContainsSumOfSocialItemsValue() throws Exception {
+
+        Budget budget = createMonthlyBudget();
+        defaultBudgetItemLists(budget);
+
+        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertNotNull("BudgetBreakdown contains SumOfSocialItems.", breakdown.getTotalSocialBudget());
+
+    }
+
+    @Test
+    public void budgetBreakdownContainsTotalMoneyAvailableValue() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2500"));
+        defaultBudgetItemLists(budget);
+
+        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertNotNull("BudgetBreakdown contains totalMoneyAvailable.", breakdown.getTotalMoneyAvailable());
+
+    }
+
+
+    // add a field to the budget object that totals the values of core and social (totalOfAllBudgetItems)
+    @Test
+         public void budgetBreakdownContainsTotalOfAllBudgetItems() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2500"));
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Item", new BigDecimal("800")));
+
+        budget.setCoreBudgetItemList(coreBudgetItemList);
+
+        List<SocialBudgetItem> socialBudgetItemList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemList.add(new SocialBudgetItem(new Date(), "Social Item", new BigDecimal("250")));
+
+        budget.setSocialBudgetItemList(socialBudgetItemList);
+
+        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertNotNull("BudgetBreakdown contains totalAllBudgetItems.", breakdown.getTotalOfAllBudgetItems());
+
+    }
+
+    @Test
+    public void budgetBreakdownTotalOfAllBudgetItemsIsEqualTo1050() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2500"));
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Item", new BigDecimal("800")));
+
+        budget.setCoreBudgetItemList(coreBudgetItemList);
+
+        List<SocialBudgetItem> socialBudgetItemList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemList.add(new SocialBudgetItem(new Date(), "Social Item", new BigDecimal("250")));
+
+        budget.setSocialBudgetItemList(socialBudgetItemList);
+
+        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertTrue("TotalMoneyAvailable is equal to 1050",
+                budgetBreakdown.getTotalOfAllBudgetItems().intValue() == 1050);
+
+    }
+
+    @Test
+    public void budgetBreakdownTotalMoneyAvailableValueIsLessThanStartingSalaryValue() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2500"));
+
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Item", new BigDecimal("800")));
+
+        budget.setCoreBudgetItemList(coreBudgetItemList);
+
+        List<SocialBudgetItem> socialBudgetItemList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemList.add(new SocialBudgetItem(new Date(), "Social Item", new BigDecimal("250")));
+
+        budget.setSocialBudgetItemList(socialBudgetItemList);
+
+        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertTrue("TotalMoneyAvailable is less than Sum Total of All Budget Items (1050)",
+                budgetBreakdown.getTotalMoneyAvailable().intValue() < 2500);
+    }
+
+    @Test
+    public void budgetBreakdownTotalMoneyAvailableValueIsEqualTo1450() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2500"));
+
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Item", new BigDecimal("800")));
+
+        budget.setCoreBudgetItemList(coreBudgetItemList);
+
+        List<SocialBudgetItem> socialBudgetItemList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemList.add(new SocialBudgetItem(new Date(), "Social Item", new BigDecimal("250")));
+
+        budget.setSocialBudgetItemList(socialBudgetItemList);
+
+        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertTrue("TotalMoneyAvailable is equal to 1450",
+                budgetBreakdown.getTotalMoneyAvailable().intValue() == 1450);
+    }
+
+    @Test
+    public void budgetBreakdownTotalMoneyAvailableValueIsEqualTo1000() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
+
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Item", new BigDecimal("500")));
+
+        budget.setCoreBudgetItemList(coreBudgetItemList);
+
+        List<SocialBudgetItem> socialBudgetItemList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemList.add(new SocialBudgetItem(new Date(), "Social Item", new BigDecimal("500")));
+
+        budget.setSocialBudgetItemList(socialBudgetItemList);
+
+        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertTrue("TotalMoneyAvailable is equal to 100",
+                budgetBreakdown.getTotalMoneyAvailable().intValue() == 1000);
+    }
 
     // testing specific configuration methods.
-
     private AnnualBudget createAnnualBudget(String description, BigDecimal salary) {
         return new AnnualBudget(description, salary, new Date());
     }
 
     private MonthlyBudget createMonthlyBudget() {
         return new MonthlyBudget("Monthly Budget", new BigDecimal("10000"), new Date());
+    }
+
+    private void defaultBudgetItemLists(Budget budget) {
+        budget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
+        budget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
     }
 
 }

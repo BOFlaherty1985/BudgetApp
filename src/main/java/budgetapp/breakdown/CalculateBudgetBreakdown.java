@@ -43,6 +43,14 @@ public class CalculateBudgetBreakdown {
         // calculate the sub total of social budget items
         breakdown.setTotalSocialBudget(calculateBudgetItemsSubTotal(budget.getSocialBudgetItemList()));
 
+        // calculate total value of all budget items
+        breakdown.setTotalOfAllBudgetItems(calculateAllBudgetItemsTotal(breakdown));
+
+        // total money available calculation
+        breakdown.setTotalMoneyAvailable(
+                calculateMoneyAvailable(budget.getSalary(), breakdown.getTotalOfAllBudgetItems())
+        );
+
         return breakdown;
     }
 
@@ -113,4 +121,25 @@ public class CalculateBudgetBreakdown {
         return subTotal;
     }
 
+    /**
+     * calculates the total of all budget items (Core & Social)
+     *
+     * @param breakdown
+     * @return
+     */
+    private BigDecimal calculateAllBudgetItemsTotal(BudgetBreakdown breakdown) {
+        return breakdown.getTotalSocialBudget().add(breakdown.getTotalCoreBudget());
+    }
+
+
+    /**
+     * calculate total money available, subtracting totalOfAllBudgetItems fro the given Salary.
+     *
+     * @param salary
+     * @param totalOfAllBudgetItems
+     * @return
+     */
+    private BigDecimal calculateMoneyAvailable(BigDecimal salary, BigDecimal totalOfAllBudgetItems) {
+        return salary.subtract(totalOfAllBudgetItems);
+    }
 }
