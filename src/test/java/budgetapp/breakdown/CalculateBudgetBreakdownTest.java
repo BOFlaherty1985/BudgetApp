@@ -373,6 +373,38 @@ public class CalculateBudgetBreakdownTest {
                 budgetBreakdown.getTotalMoneyAvailable().intValue() == 1000);
     }
 
+    @Test
+    public void budgetBreakdownContainsMoneyAvailableWeeklyTotal() throws Exception {
+
+        Budget budget = createMonthlyBudget();
+        defaultBudgetItemLists(budget);
+
+        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertNotNull("BudgetBreakdown contains moneyAvailableWeekly.", breakdown.getTotalMoneyAvailableWeekly());
+
+    }
+
+
+    @Test
+    public void budgetBreakdownTotalMoneyAvailableWeeklyValueIsEqualTo250() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
+
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Item", new BigDecimal("500")));
+
+        budget.setCoreBudgetItemList(coreBudgetItemList);
+
+        List<SocialBudgetItem> socialBudgetItemList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemList.add(new SocialBudgetItem(new Date(), "Social Item", new BigDecimal("500")));
+
+        budget.setSocialBudgetItemList(socialBudgetItemList);
+
+        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        assertTrue("TotalMoneyAvailableWeekly is equal to 250",
+                budgetBreakdown.getTotalMoneyAvailableWeekly().intValue() == 250);
+    }
+
     // testing specific configuration methods.
     private AnnualBudget createAnnualBudget(String description, BigDecimal salary) {
         return new AnnualBudget(description, salary, new Date());

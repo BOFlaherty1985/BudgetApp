@@ -22,6 +22,8 @@ public class CalculateBudgetBreakdown {
     private static final String ANNUAL_BUDGET = "ANNUAL";
     private static final String MONTHLY_BUDGET = "MONTHLY";
 
+    private static final BigDecimal DIVISIBLE_BY_FOUR = new BigDecimal("4");
+
     public BudgetBreakdown calculateBreakdown(Budget budget) throws Exception {
 
         // validate the budget object
@@ -37,6 +39,23 @@ public class CalculateBudgetBreakdown {
         // determine which type of budget object is being processed
         breakdown.setBudgetType(determineTypeOfBudget(budget));
 
+        // budget item calculations
+        processBudgetItemCalculations(budget, breakdown);
+
+        // total available calculations
+        processTotalAvailableCalculations(budget, breakdown);
+
+        return breakdown;
+    }
+
+    /**
+     * processes all budget item calculations and sets totals on the BudgetBreakdown object.
+     *
+     * @param budget
+     * @param breakdown
+     */
+    private void processBudgetItemCalculations(Budget budget, BudgetBreakdown breakdown) {
+
         // calculate the sub total of core budget items
         breakdown.setTotalCoreBudget(calculateBudgetItemsSubTotal(budget.getCoreBudgetItemList()));
 
@@ -46,12 +65,26 @@ public class CalculateBudgetBreakdown {
         // calculate total value of all budget items
         breakdown.setTotalOfAllBudgetItems(calculateAllBudgetItemsTotal(breakdown));
 
+    }
+
+    /**
+     * process all money available calculations and sets totals on the BudgetBreakdown object.
+     *
+     * @param budget
+     * @param breakdown
+     */
+    private void processTotalAvailableCalculations(Budget budget, BudgetBreakdown breakdown) {
+
         // total money available calculation
         breakdown.setTotalMoneyAvailable(
                 calculateMoneyAvailable(budget.getSalary(), breakdown.getTotalOfAllBudgetItems())
         );
 
-        return breakdown;
+        // total weekly available calculation
+        breakdown.setTotalMoneyAvailableWeekly(
+                breakdown.getTotalMoneyAvailable().divide(DIVISIBLE_BY_FOUR)
+        );
+
     }
 
     /**
@@ -131,7 +164,6 @@ public class CalculateBudgetBreakdown {
         return breakdown.getTotalSocialBudget().add(breakdown.getTotalCoreBudget());
     }
 
-
     /**
      * calculate total money available, subtracting totalOfAllBudgetItems fro the given Salary.
      *
@@ -142,4 +174,5 @@ public class CalculateBudgetBreakdown {
     private BigDecimal calculateMoneyAvailable(BigDecimal salary, BigDecimal totalOfAllBudgetItems) {
         return salary.subtract(totalOfAllBudgetItems);
     }
+
 }
