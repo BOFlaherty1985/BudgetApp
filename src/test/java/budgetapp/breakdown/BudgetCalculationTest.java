@@ -3,13 +3,17 @@ package test.java.budgetapp.breakdown;
 import main.java.budgetapp.breakdown.BudgetBreakdown;
 import main.java.budgetapp.breakdown.BudgetCalculation;
 import main.java.budgetapp.budget.annual.AnnualBudget;
+import main.java.budgetapp.budget.items.CoreBudgetItem;
 import main.java.budgetapp.budget.monthly.MonthlyBudget;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -52,9 +56,8 @@ public class BudgetCalculationTest {
     @Test
     public void assertBudgetBreakdownTypeOfBudgetIsNotNull() {
 
-        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetItemsCalculation(annualBudget,
+        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetTypeDescription(annualBudget,
                 new BudgetBreakdown());
-
 
         assert(budgetBreakdown.getBudgetType() != null);
 
@@ -63,7 +66,7 @@ public class BudgetCalculationTest {
     @Test
     public void assertBudgetBreakdownTypeOfBudgetIsEqualToAnnual() {
 
-        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetItemsCalculation(annualBudget,
+        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetTypeDescription(annualBudget,
                 new BudgetBreakdown());
 
         assert(budgetBreakdown.getBudgetType().equals("ANNUAL"));
@@ -73,11 +76,55 @@ public class BudgetCalculationTest {
     @Test
     public void assertBudgetBreakdownTypeOfBudgetIsEqualToMonthly() {
 
-        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetItemsCalculation(monthlyBudget,
+        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetTypeDescription(monthlyBudget,
                 new BudgetBreakdown());
 
         assert(budgetBreakdown.getBudgetType().equals("MONTHLY"));
 
     }
+
+    @Test
+    public void assertBudgetBreakdownTotalCoreBudgetValueIsNotNull() {
+
+        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetItemsCalculation(annualBudget,
+                new BudgetBreakdown());
+
+        assert(budgetBreakdown.getTotalCoreBudget() != null);
+
+    }
+
+    @Test
+    public void assertBudgetBreakdownTotalCoreBudgetValueIsEqualTo500() {
+
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Budget Item", new BigDecimal("500")));
+
+        annualBudget.setCoreBudgetItemList(coreBudgetItemList);
+
+        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetItemsCalculation(annualBudget,
+                new BudgetBreakdown());
+
+        assert(budgetBreakdown.getTotalCoreBudget().equals(new BigDecimal("500")));
+
+    }
+
+
+    @Test
+    public void assertBudgetBreakdownTotalCoreBudgetValueIsEqualTo750() {
+
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Core Budget Item", new BigDecimal("750")));
+
+        annualBudget.setCoreBudgetItemList(coreBudgetItemList);
+
+        assertEquals(1, coreBudgetItemList.size());
+
+        BudgetBreakdown budgetBreakdown = budgetCalculation.processBudgetItemsCalculation(annualBudget,
+                new BudgetBreakdown());
+
+        assert(budgetBreakdown.getTotalCoreBudget().equals(new BigDecimal("750")));
+
+    }
+
 
 }

@@ -1,7 +1,6 @@
 package main.java.budgetapp.breakdown;
 
 import main.java.budgetapp.budget.Budget;
-import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.items.BudgetItem;
 import main.java.budgetapp.exceptions.BudgetCalculationMissingException;
 import main.java.budgetapp.exceptions.BudgetItemsMissingException;
@@ -52,9 +51,6 @@ public class CalculateBudgetBreakdown {
     private BudgetBreakdown buildBudgetBreakdownResult(Budget budget) {
 
         BudgetBreakdown breakdown = new BudgetBreakdown();
-
-        // determine which type of budget object is being processed
-        breakdown.setBudgetType(determineTypeOfBudget(budget));
 
         // budget item calculations
         processBudgetItemCalculations(budget, breakdown);
@@ -145,15 +141,6 @@ public class CalculateBudgetBreakdown {
 
     }
 
-    /**
-     * determines which type of budget (Annual or Monthly) is being processed
-     *
-     * @param budget
-     * @return
-     */
-    private String determineTypeOfBudget(Budget budget) {
-        return (budget instanceof AnnualBudget) ? ANNUAL_BUDGET : MONTHLY_BUDGET;
-    }
 
     /**
      * calculates the total value of the a given budgetItemList.

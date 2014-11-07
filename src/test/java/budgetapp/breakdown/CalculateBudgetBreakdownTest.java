@@ -62,28 +62,6 @@ public class CalculateBudgetBreakdownTest {
 
     }
 
-    // Test that a Budget object (annual or monthly) is passed to the class CalculateBudgetBreakdown
-    @Test
-    public void isAnnualBudgetItemAcceptedInCalculateBudgetMethod() throws Exception {
-
-        AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("20000"));
-        defaultBudgetItemLists(annualBudget);
-
-        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(annualBudget, budgetBreakdown);
-        assertEquals("BudgetBreakdown budgetType equals ANNUAL", result.getBudgetType(), "ANNUAL");
-    }
-
-    @Test
-    public void isMonthlyBudgetItemAcceptedInCalculateBudgetMethod() throws Exception {
-
-        MonthlyBudget monthlyBudget = createMonthlyBudget();
-        defaultBudgetItemLists(monthlyBudget);
-
-        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget, budgetBreakdown);
-        assertEquals("BudgetBreakdown budgetType equals MONTHLY", result.getBudgetType(), "MONTHLY");
-
-    }
-
     /*
         Validate incoming budget item to ensure that the necessary data is contained within the object
 
@@ -245,16 +223,6 @@ public class CalculateBudgetBreakdownTest {
         - Test that BudgetBreakdown contains a value for 'totalMoneyAvailable', result must not be empty or null.
         - Test that BudgetBreakdown contains a value for 'totalMoneyAvailableWeekly', result must not be empty or null.
     */
-
-    @Test
-    public void budgetBreakdownContainsTypeOfBudgetDescription() throws Exception {
-
-        Budget budget = createMonthlyBudget();
-        defaultBudgetItemLists(budget);
-
-        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
-        assertNotNull("BudgetBreakdown contains typeOfBudget description.", result.getBudgetType());
-    }
 
     @Test
     public void budgetBreakdownContainsSumOfCoreItemsValue() throws Exception {
@@ -477,6 +445,11 @@ public class CalculateBudgetBreakdownTest {
 
         verify(budgetCalculation, times(1)).processBudgetItemsCalculation(budget, budgetBreakdown);
     }
+
+
+    // TODO - processBudgetTypeDescription
+    // TODO - processTotalAvailableCalculations
+
 
     // testing specific configuration methods.
     private AnnualBudget createAnnualBudget(String description, BigDecimal salary) {
