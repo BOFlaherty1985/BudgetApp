@@ -17,7 +17,6 @@ public class MonthlyBudget extends Budget {
     // TODO - pass in the form object containing data to create the object.
     public MonthlyBudget(String description, BigDecimal salary, Date submittedOn) {
         super(description, salary, submittedOn);
-
     }
 
     @Override

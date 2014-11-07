@@ -10,4 +10,5 @@ package test.java.budgetapp.budget.annual;
 public class AnnualBudgetTest {
 
 
+
 }

@@ -3,6 +3,7 @@ package main.java.budgetapp.breakdown;
 import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.items.BudgetItem;
+import main.java.budgetapp.exceptions.BudgetCalculationMissingException;
 import main.java.budgetapp.exceptions.BudgetItemsMissingException;
 import main.java.budgetapp.exceptions.SalaryNotFoundException;
 
@@ -23,13 +24,29 @@ public class CalculateBudgetBreakdown {
     private static final String MONTHLY_BUDGET = "MONTHLY";
 
     private static final BigDecimal DIVISIBLE_BY_FOUR = new BigDecimal("4");
+    private BudgetCalculation budgetCalculation;
 
-    public BudgetBreakdown calculateBreakdown(Budget budget) throws Exception {
+    // TODO - modify class to 'PresentBudgetBreakDown' and move calculations to a separate class ? (using composition)
+
+    public BudgetBreakdown calculateBreakdown(Budget budget, BudgetBreakdown budgetBreakdown) throws Exception {
+
+        // validate CalculateBudgetBreakdown
+        validate();
+
+        budgetCalculation.processBudgetItemsCalculation(budget, budgetBreakdown);
 
         // validate the budget object
         validateBudget(budget);
 
         return buildBudgetBreakdownResult(budget);
+    }
+
+    private void validate() throws BudgetCalculationMissingException {
+
+        if(budgetCalculation == null) {
+            throw new BudgetCalculationMissingException("test");
+        }
+
     }
 
     private BudgetBreakdown buildBudgetBreakdownResult(Budget budget) {
@@ -86,6 +103,8 @@ public class CalculateBudgetBreakdown {
         );
 
     }
+
+    // TODO - remove validation and calculations to separate class (composition)
 
     /**
      * validates the budget object ensure it is valid and ready for processing.
@@ -173,6 +192,10 @@ public class CalculateBudgetBreakdown {
      */
     private BigDecimal calculateMoneyAvailable(BigDecimal salary, BigDecimal totalOfAllBudgetItems) {
         return salary.subtract(totalOfAllBudgetItems);
+    }
+
+    public void setBudgetCalculation(BudgetCalculation budgetCalculation) {
+        this.budgetCalculation = budgetCalculation;
     }
 
 }

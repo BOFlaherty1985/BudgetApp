@@ -1,15 +1,19 @@
 package test.java.budgetapp.breakdown;
 
 import main.java.budgetapp.breakdown.BudgetBreakdown;
+import main.java.budgetapp.breakdown.BudgetCalculation;
 import main.java.budgetapp.breakdown.CalculateBudgetBreakdown;
 import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.items.CoreBudgetItem;
 import main.java.budgetapp.budget.items.SocialBudgetItem;
 import main.java.budgetapp.budget.monthly.MonthlyBudget;
+import main.java.budgetapp.exceptions.BudgetCalculationMissingException;
 import main.java.budgetapp.exceptions.BudgetItemsMissingException;
 import main.java.budgetapp.exceptions.SalaryNotFoundException;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -18,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Calculate Budget Breakdown Test
@@ -30,6 +36,17 @@ public class CalculateBudgetBreakdownTest {
 
     private CalculateBudgetBreakdown calculateBudgetBreakdown = new CalculateBudgetBreakdown();
 
+    private BudgetCalculation budgetCalculation;
+    private BudgetBreakdown budgetBreakdown;
+
+    @Before
+    public void setup() {
+        this.budgetCalculation = Mockito.mock(BudgetCalculation.class);
+        this.budgetBreakdown = Mockito.mock(BudgetBreakdown.class);
+
+        calculateBudgetBreakdown.setBudgetCalculation(budgetCalculation);
+    }
+
     // TODO - Start of Class
     // Ensure that the Budget object's data is complete and valid, throw exceptions if this is not the case.
 
@@ -40,8 +57,8 @@ public class CalculateBudgetBreakdownTest {
         AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
         defaultBudgetItemLists(annualBudget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-        assertNotNull("BudgetBreakdown is not null", breakdown);
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(annualBudget, budgetBreakdown);
+        assertNotNull("BudgetBreakdown is not null", result);
 
     }
 
@@ -52,8 +69,8 @@ public class CalculateBudgetBreakdownTest {
         AnnualBudget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("20000"));
         defaultBudgetItemLists(annualBudget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-        assertEquals("BudgetBreakdown budgetType equals ANNUAL", breakdown.getBudgetType(), "ANNUAL");
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(annualBudget, budgetBreakdown);
+        assertEquals("BudgetBreakdown budgetType equals ANNUAL", result.getBudgetType(), "ANNUAL");
     }
 
     @Test
@@ -62,8 +79,8 @@ public class CalculateBudgetBreakdownTest {
         MonthlyBudget monthlyBudget = createMonthlyBudget();
         defaultBudgetItemLists(monthlyBudget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
-        assertEquals("BudgetBreakdown budgetType equals MONTHLY", breakdown.getBudgetType(), "MONTHLY");
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget, budgetBreakdown);
+        assertEquals("BudgetBreakdown budgetType equals MONTHLY", result.getBudgetType(), "MONTHLY");
 
     }
 
@@ -82,7 +99,7 @@ public class CalculateBudgetBreakdownTest {
         Budget annualBudget = createAnnualBudget("Annual Budget", null);
 
         try {
-            calculateBudgetBreakdown.calculateBreakdown(annualBudget);
+            calculateBudgetBreakdown.calculateBreakdown(annualBudget, budgetBreakdown);
             fail("Budget does not contain a Salary value");
         } catch(SalaryNotFoundException e) {
             e.printStackTrace();
@@ -97,7 +114,7 @@ public class CalculateBudgetBreakdownTest {
         Budget monthlyBudget = createMonthlyBudget();
 
         try {
-            calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
+            calculateBudgetBreakdown.calculateBreakdown(monthlyBudget, budgetBreakdown);
             fail("Budget does not contain any coreBudgetItems.");
         } catch (BudgetItemsMissingException e) {
             assertEquals("Core Budget Items is null", e.getMessage(), "budgetItemList within budget is null");
@@ -112,7 +129,7 @@ public class CalculateBudgetBreakdownTest {
         monthlyBudget.setCoreBudgetItemList(new ArrayList<CoreBudgetItem>());
 
         try {
-            calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
+            calculateBudgetBreakdown.calculateBreakdown(monthlyBudget, budgetBreakdown);
             fail("Budget does not contain any socialBudgetItems.");
         } catch(BudgetItemsMissingException e) {
             assertEquals("Social Budget Items is null", e.getMessage(), "budgetItemList within budget is null");
@@ -143,8 +160,8 @@ public class CalculateBudgetBreakdownTest {
         Budget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("5000"));
         defaultBudgetItemLists(annualBudget);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-        assertNotNull("totalCoreBudget is not null.", budgetBreakdown.getTotalCoreBudget());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(annualBudget, budgetBreakdown);
+        assertNotNull("totalCoreBudget is not null.", result.getTotalCoreBudget());
     }
 
     @Test
@@ -153,8 +170,8 @@ public class CalculateBudgetBreakdownTest {
         Budget annualBudget = createAnnualBudget("Annual Budget", new BigDecimal("50000"));
         defaultBudgetItemLists(annualBudget);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-        assertEquals("totalCoreBudget is not equal to default value of ZERO.", budgetBreakdown.getTotalCoreBudget(),
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(annualBudget, budgetBreakdown);
+        assertEquals("totalCoreBudget is not equal to default value of ZERO.", result.getTotalCoreBudget(),
                 new BigDecimal(BigInteger.ZERO));
 
     }
@@ -170,8 +187,8 @@ public class CalculateBudgetBreakdownTest {
         annualBudget.setCoreBudgetItemList(coreBudgetItemList);
         annualBudget.setSocialBudgetItemList(new ArrayList<SocialBudgetItem>());
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(annualBudget);
-        assertEquals("totalCoreBudget is not equal to 800.", budgetBreakdown.getTotalCoreBudget(),
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(annualBudget, budgetBreakdown);
+        assertEquals("totalCoreBudget is not equal to 800.", result.getTotalCoreBudget(),
                 new BigDecimal("800"));
 
     }
@@ -182,8 +199,8 @@ public class CalculateBudgetBreakdownTest {
         Budget monthlyBudget = createMonthlyBudget();
         defaultBudgetItemLists(monthlyBudget);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
-        assertNotNull("totalSocialBudget is not null", budgetBreakdown.getTotalSocialBudget());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget, budgetBreakdown);
+        assertNotNull("totalSocialBudget is not null", result.getTotalSocialBudget());
 
     }
 
@@ -193,8 +210,8 @@ public class CalculateBudgetBreakdownTest {
         Budget monthlyBudget = createMonthlyBudget();
         defaultBudgetItemLists(monthlyBudget);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
-        assertEquals("totalSocialBudget is not equal to Zero.", budgetBreakdown.getTotalSocialBudget(),
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget, budgetBreakdown);
+        assertEquals("totalSocialBudget is not equal to Zero.", result.getTotalSocialBudget(),
                 new BigDecimal(BigInteger.ZERO));
 
     }
@@ -211,8 +228,8 @@ public class CalculateBudgetBreakdownTest {
 
         monthlyBudget.setSocialBudgetItemList(socialBudgetItemList);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget);
-        assertEquals("totalSocialBudget is not equal to Zero.", budgetBreakdown.getTotalSocialBudget(),
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(monthlyBudget, budgetBreakdown);
+        assertEquals("totalSocialBudget is not equal to Zero.", result.getTotalSocialBudget(),
                 new BigDecimal("500"));
 
     }
@@ -235,8 +252,8 @@ public class CalculateBudgetBreakdownTest {
         Budget budget = createMonthlyBudget();
         defaultBudgetItemLists(budget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
-        assertNotNull("BudgetBreakdown contains typeOfBudget description.", breakdown.getBudgetType());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+        assertNotNull("BudgetBreakdown contains typeOfBudget description.", result.getBudgetType());
     }
 
     @Test
@@ -245,8 +262,8 @@ public class CalculateBudgetBreakdownTest {
         Budget budget = createMonthlyBudget();
         defaultBudgetItemLists(budget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
-        assertNotNull("BudgetBreakdown contains SumOfCoreItems.", breakdown.getTotalCoreBudget());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+        assertNotNull("BudgetBreakdown contains SumOfCoreItems.", result.getTotalCoreBudget());
 
     }
 
@@ -256,8 +273,8 @@ public class CalculateBudgetBreakdownTest {
         Budget budget = createMonthlyBudget();
         defaultBudgetItemLists(budget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
-        assertNotNull("BudgetBreakdown contains SumOfSocialItems.", breakdown.getTotalSocialBudget());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+        assertNotNull("BudgetBreakdown contains SumOfSocialItems.", result.getTotalSocialBudget());
 
     }
 
@@ -267,8 +284,8 @@ public class CalculateBudgetBreakdownTest {
         Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2500"));
         defaultBudgetItemLists(budget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
-        assertNotNull("BudgetBreakdown contains totalMoneyAvailable.", breakdown.getTotalMoneyAvailable());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+        assertNotNull("BudgetBreakdown contains totalMoneyAvailable.", result.getTotalMoneyAvailable());
 
     }
 
@@ -288,8 +305,8 @@ public class CalculateBudgetBreakdownTest {
 
         budget.setSocialBudgetItemList(socialBudgetItemList);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
-        assertNotNull("BudgetBreakdown contains totalAllBudgetItems.", breakdown.getTotalOfAllBudgetItems());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+        assertNotNull("BudgetBreakdown contains totalAllBudgetItems.", result.getTotalOfAllBudgetItems());
 
     }
 
@@ -307,9 +324,9 @@ public class CalculateBudgetBreakdownTest {
 
         budget.setSocialBudgetItemList(socialBudgetItemList);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
         assertTrue("TotalMoneyAvailable is equal to 1050",
-                budgetBreakdown.getTotalOfAllBudgetItems().intValue() == 1050);
+                result.getTotalOfAllBudgetItems().intValue() == 1050);
 
     }
 
@@ -328,9 +345,9 @@ public class CalculateBudgetBreakdownTest {
 
         budget.setSocialBudgetItemList(socialBudgetItemList);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
         assertTrue("TotalMoneyAvailable is less than Sum Total of All Budget Items (1050)",
-                budgetBreakdown.getTotalMoneyAvailable().intValue() < 2500);
+                result.getTotalMoneyAvailable().intValue() < 2500);
     }
 
     @Test
@@ -348,9 +365,9 @@ public class CalculateBudgetBreakdownTest {
 
         budget.setSocialBudgetItemList(socialBudgetItemList);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
         assertTrue("TotalMoneyAvailable is equal to 1450",
-                budgetBreakdown.getTotalMoneyAvailable().intValue() == 1450);
+                result.getTotalMoneyAvailable().intValue() == 1450);
     }
 
     @Test
@@ -368,9 +385,9 @@ public class CalculateBudgetBreakdownTest {
 
         budget.setSocialBudgetItemList(socialBudgetItemList);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
         assertTrue("TotalMoneyAvailable is equal to 100",
-                budgetBreakdown.getTotalMoneyAvailable().intValue() == 1000);
+                result.getTotalMoneyAvailable().intValue() == 1000);
     }
 
     @Test
@@ -379,8 +396,8 @@ public class CalculateBudgetBreakdownTest {
         Budget budget = createMonthlyBudget();
         defaultBudgetItemLists(budget);
 
-        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
-        assertNotNull("BudgetBreakdown contains moneyAvailableWeekly.", breakdown.getTotalMoneyAvailableWeekly());
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+        assertNotNull("BudgetBreakdown contains moneyAvailableWeekly.", result.getTotalMoneyAvailableWeekly());
 
     }
 
@@ -400,9 +417,65 @@ public class CalculateBudgetBreakdownTest {
 
         budget.setSocialBudgetItemList(socialBudgetItemList);
 
-        BudgetBreakdown budgetBreakdown = calculateBudgetBreakdown.calculateBreakdown(budget);
+        BudgetBreakdown result = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
         assertTrue("TotalMoneyAvailableWeekly is equal to 250",
-                budgetBreakdown.getTotalMoneyAvailableWeekly().intValue() == 250);
+                result.getTotalMoneyAvailableWeekly().intValue() == 250);
+    }
+
+    // TODO - introduce composition for validation/calculations within CalculateBudgetBreakdown
+
+    @Test
+    public void validateThatBudgetCalculationMissingExceptionThrownIfNull() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
+        defaultBudgetItemLists(budget);
+
+        calculateBudgetBreakdown.setBudgetCalculation(null);
+
+        try {
+            calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+            fail("Budget Calculation Object Is Missing.");
+        } catch(BudgetCalculationMissingException e) {
+            assertEquals("Budget Calculation Object Missing", e.getMessage(), "test");
+        }
+
+    }
+
+    @Test
+    public void injectBudgetCalculationObjectIntoClass() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
+        defaultBudgetItemLists(budget);
+
+        BudgetBreakdown breakdown = calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+        assertTrue(breakdown != null);
+    }
+
+    // TODO - test that the correct methods of BudgetCalculation are called from within the CalculateBudgetBreakdown class
+
+    @Test
+    public void ensureBudgetItemsCalculationMethodIsTriggered() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
+        defaultBudgetItemLists(budget);
+
+        BudgetBreakdown budgetBreakdown = new BudgetBreakdown();
+
+        calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+
+        verify(budgetCalculation, times(1)).processBudgetItemsCalculation(budget, budgetBreakdown);
+
+    }
+
+    @Test
+    public void ensureBudgetItemCalculationMethodHasCorrectArgumentList() throws Exception {
+
+        Budget budget = createAnnualBudget("Annual Budget", new BigDecimal("2000"));
+        defaultBudgetItemLists(budget);
+
+        calculateBudgetBreakdown.calculateBreakdown(budget, budgetBreakdown);
+
+        verify(budgetCalculation, times(1)).processBudgetItemsCalculation(budget, budgetBreakdown);
     }
 
     // testing specific configuration methods.
