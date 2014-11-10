@@ -369,7 +369,6 @@ public class CalculateBudgetBreakdownTest {
 
     }
 
-
     @Test
     public void budgetBreakdownTotalMoneyAvailableWeeklyValueIsEqualTo250() throws Exception {
 
@@ -449,7 +448,6 @@ public class CalculateBudgetBreakdownTest {
 
     // TODO - processBudgetTypeDescription
     // TODO - processTotalAvailableCalculations
-
 
     // testing specific configuration methods.
     private AnnualBudget createAnnualBudget(String description, BigDecimal salary) {
