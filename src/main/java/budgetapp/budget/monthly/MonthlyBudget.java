@@ -21,12 +21,11 @@ public class MonthlyBudget extends Budget {
     }
 
     @Override
-    public Budget buildBudget(BudgetFormData budgetFormData) {
+    public void buildBudget(BudgetFormData budgetFormData) {
         // TODO - form object from the user to be passed into the buildBudget method to create the object.
         this.setCoreBudgetItemList(null);
         this.setSocialBudgetItemList(null);
 
-        return null;
     }
 
 }

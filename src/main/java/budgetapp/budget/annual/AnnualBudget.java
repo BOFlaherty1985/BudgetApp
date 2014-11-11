@@ -20,17 +20,19 @@ public class AnnualBudget extends Budget {
     }
 
     @Override
-    public Budget buildBudget(BudgetFormData budgetFormData) throws Exception {
+    public void buildBudget(BudgetFormData budgetFormData) throws Exception {
 
         validate(budgetFormData);
 
         // TODO - Should the AnnualBudget object multiply all input values by 12?
         // TODO - form object from the user to be passed into the buildBudget method to create the object.
+        if(budgetFormData.getSalary() == null || budgetFormData.getSubmittedOn() == null) {
+            throw new Exception();
+        }
 
         this.salary = budgetFormData.getSalary();
         this.submittedOn = budgetFormData.getSubmittedOn();
 
-        return this;
     }
 
     private void validate(BudgetFormData budgetFormData) throws Exception {
@@ -40,5 +42,6 @@ public class AnnualBudget extends Budget {
     /*
         TODO - create a method to multiply the users values by twelve (annual total).
         Generic method to loop through each value of the given List<?> and multiply the value by twelve.
-     */
+    */
+
 }

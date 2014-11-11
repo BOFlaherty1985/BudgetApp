@@ -28,7 +28,7 @@ public abstract class Budget {
     }
 
     // TODO - build the budgetObject by passing in the form DTO to the buildBudget() method
-    public abstract Budget buildBudget(BudgetFormData budgetFormData) throws Exception;
+    public abstract void buildBudget(BudgetFormData budgetFormData) throws Exception;
 
     protected List<CoreBudgetItem> coreBudgetItemList;
     protected List<SocialBudgetItem> socialBudgetItemList;

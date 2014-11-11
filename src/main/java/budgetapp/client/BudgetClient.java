@@ -21,10 +21,10 @@ public class BudgetClient {
 
     public static void main(String[] args) throws Exception {
 
-        // TODO - mock a form object of user data to build a budget object (TDD)
-        Budget budget = budgetFactory.requestBudgetByType("MONTHLY");
-
         BudgetFormData formData = new BudgetFormData();
+
+        Budget budget = budgetFactory.requestBudgetByType("MONTHLY");
+        budget.buildBudget(formData);
 
         // call buildBudget() method
         budget.buildBudget(formData);

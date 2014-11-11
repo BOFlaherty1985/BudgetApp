@@ -34,6 +34,9 @@ public class AnnualBudgetTest {
     public void setUp() {
         budget = new AnnualBudget("Description", new BigDecimal("2000"), new Date());
         budgetFormData = Mockito.mock(BudgetFormData.class);
+
+        when(budgetFormData.getSalary()).thenReturn(new BigDecimal("2000"));
+        when(budgetFormData.getSubmittedOn()).thenReturn(new Date());
     }
 
     @After
@@ -44,8 +47,8 @@ public class AnnualBudgetTest {
 
     @Test
     public void assertThaMethodReturnIsNotNull() throws Exception {
-        Budget result = budget.buildBudget(budgetFormData);
-        assertNotNull(result);
+        budget.buildBudget(budgetFormData);
+        assertNotNull(budget);
     }
 
     @Test
@@ -60,41 +63,63 @@ public class AnnualBudgetTest {
 
     }
 
-    // TODO - Validate BudgetFormData (== null)
-
     // TODO - Test that all methods within BudgetFormData are executed and valid values have been set. (not null and contain a value)
     @Test
     public void ensureSalaryHasBeenCalledOnFormObject() throws Exception {
 
         budget.buildBudget(budgetFormData);
-        verify(budgetFormData, times(1)).getSalary();
+        verify(budgetFormData, times(2)).getSalary();
 
     }
 
     @Test
     public void assertBudgetContainsSalaryValue() throws Exception {
 
-        when(budgetFormData.getSalary()).thenReturn(new BigDecimal("2000"));
+        budget.buildBudget(budgetFormData);
+        assertNotNull(budget.getSalary());
+    }
 
-        Budget result = budget.buildBudget(budgetFormData);
-        assertNotNull(result.getSalary());
+    @Test
+    public void exceptionThrownIfSalaryIsNullWithinFormData() {
+
+        when(budgetFormData.getSalary()).thenReturn(null);
+
+        try {
+            budget.buildBudget(budgetFormData);
+            fail("Salary is null.");
+        } catch (Exception e) {
+            System.out.println("error thrown");
+        }
+
     }
 
     @Test
     public void ensureSubmittedOnHasBeenCalledOnFormObject() throws Exception {
 
         budget.buildBudget(budgetFormData);
-        verify(budgetFormData, times(1)).getSubmittedOn();
+        verify(budgetFormData, times(2)).getSubmittedOn();
 
     }
 
     @Test
     public void assertBudgetContainsSubmittedOnValue() throws Exception {
 
-        when(budgetFormData.getSubmittedOn()).thenReturn(new Date());
+        budget.buildBudget(budgetFormData);
+        assertNotNull(budget.getSubmittedOn());
 
-        Budget result = budget.buildBudget(budgetFormData);
-        assertNotNull(result.getSubmittedOn());
+    }
+
+    @Test
+    public void exceptionThrownIfSubmittedOnIsNullWithinFormData() {
+
+        when(budgetFormData.getSubmittedOn()).thenReturn(null);
+
+        try {
+            budget.buildBudget(budgetFormData);
+            fail("SubmittedOn is null.");
+        } catch (Exception e) {
+            System.out.println("SubmittedOn is null");
+        }
 
     }
 
@@ -107,3 +132,5 @@ public class AnnualBudgetTest {
     // TODO - Ensure values are differ from FormObject to BudgetObject
 
 }
+
+
