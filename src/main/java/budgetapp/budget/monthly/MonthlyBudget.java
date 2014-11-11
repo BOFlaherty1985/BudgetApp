@@ -1,6 +1,7 @@
 package main.java.budgetapp.budget.monthly;
 
 import main.java.budgetapp.budget.Budget;
+import main.java.budgetapp.budget.form.BudgetFormData;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -20,11 +21,12 @@ public class MonthlyBudget extends Budget {
     }
 
     @Override
-    public void buildBudget() {
+    public Budget buildBudget(BudgetFormData budgetFormData) {
         // TODO - form object from the user to be passed into the buildBudget method to create the object.
-        this.setTestValue("TESTING");
         this.setCoreBudgetItemList(null);
         this.setSocialBudgetItemList(null);
+
+        return null;
     }
 
 }

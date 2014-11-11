@@ -14,7 +14,10 @@ public abstract class BudgetFactory {
     protected static final String ANNUAL_BUDGET = "ANNUAL";
 
     /**
-     * Client request entry point
+     * create budget by the users budget_choice value.
+     *
+     * @param budget_choice
+     * @return
      */
     public Budget requestBudgetByType(String budget_choice) {
         return createBudget(budget_choice);

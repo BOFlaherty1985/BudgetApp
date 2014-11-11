@@ -1,6 +1,10 @@
 package main.java.budgetapp.client;
 
+import main.java.budgetapp.breakdown.BudgetBreakdown;
+import main.java.budgetapp.breakdown.BudgetCalculation;
+import main.java.budgetapp.breakdown.CalculateBudgetBreakdown;
 import main.java.budgetapp.budget.Budget;
+import main.java.budgetapp.budget.form.BudgetFormData;
 import main.java.budgetapp.factory.BudgetFactory;
 import main.java.budgetapp.factory.CreateBudget;
 
@@ -15,14 +19,26 @@ public class BudgetClient {
 
     private static BudgetFactory budgetFactory = new CreateBudget();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         // TODO - mock a form object of user data to build a budget object (TDD)
         Budget budget = budgetFactory.requestBudgetByType("MONTHLY");
 
+        BudgetFormData formData = new BudgetFormData();
+
         // call buildBudget() method
-        budget.buildBudget();
+        budget.buildBudget(formData);
         System.out.println(budget.toString());
+
+        CalculateBudgetBreakdown breakdown = new CalculateBudgetBreakdown();
+        breakdown.setBudgetCalculation(new BudgetCalculation());
+
+        try {
+            breakdown.calculateBreakdown(budget, new BudgetBreakdown());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

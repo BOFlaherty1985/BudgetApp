@@ -20,18 +20,18 @@ public class BudgetCalculation {
 
     private static final String ANNUAL = "ANNUAL";
     private static final String MONTHLY = "MONTHLY";
-    public static final BigDecimal NUMBER_OF_WEEKS = new BigDecimal("4");
+    private static final BigDecimal NUMBER_OF_WEEKS = new BigDecimal("4");
 
     /**
      * process budget type
      *
-     * @param budgetObject
-     * @param budgetBreakdown
-     * @return
+     * @param budget - object representing a budget
+     * @param budgetBreakdown - representation of the breakdown of a budget object
+     * @return - breakdown of values
      */
-    public BudgetBreakdown processBudgetTypeDescription(Budget budgetObject, BudgetBreakdown budgetBreakdown) {
+    public BudgetBreakdown processBudgetTypeDescription(Budget budget, BudgetBreakdown budgetBreakdown) {
 
-        budgetBreakdown.setBudgetType(setBudgetType(budgetObject, budgetBreakdown));
+        budgetBreakdown.setBudgetType(setBudgetType(budget));
 
         return budgetBreakdown;
     }
@@ -39,38 +39,36 @@ public class BudgetCalculation {
     /**
      * determines which type of budget (Annual or Monthly) is being processed.
      *
-     * @param budgetObject
-     * @param budgetBreakdown
-     * @return
+     * @param budget - object representing a budget
+     * @return - breakdown of values
      */
-    private String setBudgetType(Budget budgetObject, BudgetBreakdown budgetBreakdown) {
-        return (budgetObject instanceof AnnualBudget) ? ANNUAL : MONTHLY;
+    private String setBudgetType(Budget budget) {
+        return (budget instanceof AnnualBudget) ? ANNUAL : MONTHLY;
     }
-
 
     /**
      * process Budget Item lists
      *
-     * @param budgetObject
-     * @param budgetBreakdown
-     * @return
+     * @param budget - object representing a budget
+     * @param budgetBreakdown - representation of the breakdown of a budget object
+     * @return - breakdown of values
      * @throws Exception
      */
-    public BudgetBreakdown processBudgetItemsCalculation(Budget budgetObject, BudgetBreakdown budgetBreakdown) throws Exception {
+    public BudgetBreakdown processBudgetItemsCalculation(Budget budget, BudgetBreakdown budgetBreakdown) throws Exception {
 
         // Least effort to obtain the green light for all test cases (Not Complete)
-        BigDecimal totalCoreItems = processBudgetItemsList(budgetObject, budgetObject.getCoreBudgetItemList());
+        BigDecimal totalCoreItems = processBudgetItemsList(budget, budget.getCoreBudgetItemList());
         budgetBreakdown.setTotalCoreBudget(totalCoreItems);
 
-        BigDecimal totalSocialItems = processBudgetItemsList(budgetObject, budgetObject.getSocialBudgetItemList());
+        BigDecimal totalSocialItems = processBudgetItemsList(budget, budget.getSocialBudgetItemList());
         budgetBreakdown.setTotalSocialBudget(totalSocialItems);
 
         return budgetBreakdown;
     }
 
-    private BigDecimal processBudgetItemsList(Budget budgetObject, List budgetItems) throws BudgetItemsMissingException {
+    private BigDecimal processBudgetItemsList(Budget budget, List budgetItems) throws BudgetItemsMissingException {
 
-        if(budgetObject.getCoreBudgetItemList() != null && budgetObject.getSocialBudgetItemList() != null) {
+        if(budget.getCoreBudgetItemList() != null && budget.getSocialBudgetItemList() != null) {
             return calculateTotalBudgetItems(budgetItems);
         } else {
             throw new BudgetItemsMissingException("BudgetItemList is null.");
@@ -94,8 +92,8 @@ public class BudgetCalculation {
     /**
      * calculates total of core and social budget items.
      *
-     * @param breakdown
-     * @return
+     * @param breakdown - representation of the breakdown of a budget object
+     * @return - breakdown of values
      */
     public BudgetBreakdown calculateTotalAllBudgetItems(BudgetBreakdown breakdown) {
 
@@ -103,7 +101,7 @@ public class BudgetCalculation {
 
         if(breakdown.getTotalCoreBudget() !=  null && breakdown.getTotalSocialBudget() != null) {
             totalAllItems = breakdown.getTotalCoreBudget().add(breakdown.getTotalSocialBudget());
-        };
+        }
 
         breakdown.setTotalOfAllBudgetItems(totalAllItems);
 
@@ -113,10 +111,10 @@ public class BudgetCalculation {
     /**
      * calculates money available and money available per week totals
      *
-     * @param breakdown
-     * @param salary
-     * @param totalAllItems
-     * @return
+     * @param breakdown - representation of the breakdown of a budget object
+     * @param salary - salary input as BigDecimal
+     * @param totalAllItems = total of all budget items as BigDecimal
+     * @return - breakdown of values
      */
     public BudgetBreakdown processTotalMoneyAvailableCalculation(BudgetBreakdown breakdown, BigDecimal salary,
                                                                  BigDecimal totalAllItems) {

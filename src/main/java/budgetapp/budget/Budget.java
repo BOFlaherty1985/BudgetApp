@@ -1,5 +1,6 @@
 package main.java.budgetapp.budget;
 
+import main.java.budgetapp.budget.form.BudgetFormData;
 import main.java.budgetapp.budget.items.CoreBudgetItem;
 import main.java.budgetapp.budget.items.SocialBudgetItem;
 
@@ -19,7 +20,6 @@ public abstract class Budget {
     protected String description;
     protected BigDecimal salary;
     protected Date submittedOn;
-    protected String testValue;
 
     public Budget(String description, BigDecimal salary, Date submittedOn) {
         this.description = description;
@@ -27,7 +27,8 @@ public abstract class Budget {
         this.submittedOn = submittedOn;
     }
 
-    public abstract void buildBudget();
+    // TODO - build the budgetObject by passing in the form DTO to the buildBudget() method
+    public abstract Budget buildBudget(BudgetFormData budgetFormData) throws Exception;
 
     protected List<CoreBudgetItem> coreBudgetItemList;
     protected List<SocialBudgetItem> socialBudgetItemList;
@@ -72,22 +73,12 @@ public abstract class Budget {
         this.socialBudgetItemList = socialBudgetItemList;
     }
 
-    // TODO - remove after testing value can be set
-    public String getTestValue() {
-        return testValue;
-    }
-
-    public void setTestValue(String testValue) {
-        this.testValue = testValue;
-    }
-
     @Override
     public String toString() {
         return "Budget{" +
                 "description='" + description + '\'' +
                 ", salary=" + salary +
                 ", submittedOn=" + submittedOn +
-                ", testValue='" + testValue + '\'' +
                 ", coreBudgetItemList=" + coreBudgetItemList +
                 ", socialBudgetItemList=" + socialBudgetItemList +
                 '}';

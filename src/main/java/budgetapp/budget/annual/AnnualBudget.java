@@ -1,6 +1,7 @@
 package main.java.budgetapp.budget.annual;
 
 import main.java.budgetapp.budget.Budget;
+import main.java.budgetapp.budget.form.BudgetFormData;
 
 import java.util.Date;
 import java.math.BigDecimal;
@@ -19,11 +20,21 @@ public class AnnualBudget extends Budget {
     }
 
     @Override
-    public void buildBudget() {
+    public Budget buildBudget(BudgetFormData budgetFormData) throws Exception {
+
+        validate(budgetFormData);
 
         // TODO - Should the AnnualBudget object multiply all input values by 12?
         // TODO - form object from the user to be passed into the buildBudget method to create the object.
 
+        this.salary = budgetFormData.getSalary();
+        this.submittedOn = budgetFormData.getSubmittedOn();
+
+        return this;
+    }
+
+    private void validate(BudgetFormData budgetFormData) throws Exception {
+        if(budgetFormData == null) throw new Exception("BudgetFormData is null.");
     }
 
     /*
