@@ -19,15 +19,18 @@ public class BudgetClient {
 
     private static BudgetFactory budgetFactory = new CreateBudget();
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         BudgetFormData formData = new BudgetFormData();
 
-        Budget budget = budgetFactory.requestBudgetByType("MONTHLY");
-        budget.buildBudget(formData);
+        Budget budget = budgetFactory.requestBudgetByType("ANNUAL");
 
         // call buildBudget() method
-        budget.buildBudget(formData);
+        try {
+            budget.buildBudget(formData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println(budget.toString());
 
         CalculateBudgetBreakdown breakdown = new CalculateBudgetBreakdown();

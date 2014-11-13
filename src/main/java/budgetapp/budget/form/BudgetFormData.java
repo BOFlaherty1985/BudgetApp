@@ -1,7 +1,10 @@
 package main.java.budgetapp.budget.form;
 
+import main.java.budgetapp.budget.items.CoreBudgetItem;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Description Here
@@ -14,6 +17,7 @@ public class BudgetFormData {
 
     private BigDecimal salary;
     private Date submittedOn;
+    private List<CoreBudgetItem> coreBudgetItemsList;
 
     public BigDecimal getSalary() {
         return salary;
@@ -30,4 +34,13 @@ public class BudgetFormData {
     public void setSubmittedOn(Date submittedOn) {
         this.submittedOn = submittedOn;
     }
+
+    public List<CoreBudgetItem> getCoreBudgetItemsList() {
+        return coreBudgetItemsList;
+    }
+
+    public void setCoreBudgetItemsList(List<CoreBudgetItem> coreBudgetItemsList) {
+        this.coreBudgetItemsList = coreBudgetItemsList;
+    }
+
 }
