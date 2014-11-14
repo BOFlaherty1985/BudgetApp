@@ -66,7 +66,7 @@ public class BudgetCalculation {
         return budgetBreakdown;
     }
 
-    private BigDecimal processBudgetItemsList(Budget budget, List budgetItems) throws BudgetItemsMissingException {
+    private BigDecimal processBudgetItemsList(Budget budget, List<? extends BudgetItem> budgetItems) throws BudgetItemsMissingException {
 
         if(budget.getCoreBudgetItemList() != null && budget.getSocialBudgetItemList() != null) {
             return calculateTotalBudgetItems(budgetItems);
@@ -75,13 +75,11 @@ public class BudgetCalculation {
         }
     }
 
-    private BigDecimal calculateTotalBudgetItems(List budgetItems) {
+    private BigDecimal calculateTotalBudgetItems(List<? extends BudgetItem> budgetItems) {
 
         BigDecimal totalBudgetItem = new BigDecimal(BigInteger.ZERO);
 
-        for(Object obj : budgetItems) {
-            BudgetItem item = (BudgetItem) obj;
-
+        for(BudgetItem item : budgetItems) {
             totalBudgetItem = (item.getItemMonetaryAmount() != null) ? totalBudgetItem.add(item.getItemMonetaryAmount())
                     : totalBudgetItem.add(BigDecimal.ZERO);
         }
