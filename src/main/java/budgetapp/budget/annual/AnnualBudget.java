@@ -2,10 +2,14 @@ package main.java.budgetapp.budget.annual;
 
 import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.form.BudgetFormData;
+import main.java.budgetapp.budget.items.BudgetItem;
 import main.java.budgetapp.budget.items.CoreBudgetItem;
+import main.java.budgetapp.budget.items.SocialBudgetItem;
+import main.java.budgetapp.exceptions.BudgetItemsMissingException;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Annual Budget Object.
@@ -32,10 +36,12 @@ public class AnnualBudget extends Budget {
         setSalary(multiplyMonetaryValueByTwelve(budgetFormData.getSalary())); // overrides default salary value
         setSubmittedOn(budgetFormData.getSubmittedOn()); // this is not required, already set in constructor
 
-        // TODO - Generic method to loop through each value of the given List<?> and multiply the value by 12
-        processCoreBudgetItems(budgetFormData);
+        // budget items
+        List<CoreBudgetItem> coreBudgetItems = (List<CoreBudgetItem>) processBudgetItems(budgetFormData.getCoreBudgetItemsList());
+        setCoreBudgetItemList(coreBudgetItems);
 
-        setCoreBudgetItemList(budgetFormData.getCoreBudgetItemsList());
+        List<SocialBudgetItem> socialBudgetItemList = (List<SocialBudgetItem>) processBudgetItems(budgetFormData.getSocialBudgetItemsList());
+        setSocialBudgetItemList(socialBudgetItemList);
 
     }
 
@@ -50,7 +56,7 @@ public class AnnualBudget extends Budget {
             }
 
             // TODO - use budget items exception
-            if(budgetFormData.getCoreBudgetItemsList() == null) {
+            if(budgetFormData.getCoreBudgetItemsList() == null || budgetFormData.getSocialBudgetItemsList() == null) {
                 throw new Exception();
             }
 
@@ -62,21 +68,22 @@ public class AnnualBudget extends Budget {
         return monetaryValue.multiply(TWELVE_MONTHS);
     }
 
-    private void processCoreBudgetItems(BudgetFormData budgetFormData) throws Exception {
+    private List<? extends BudgetItem> processBudgetItems(List<? extends BudgetItem> budgetItemList) throws Exception {
         int index = 0;
 
-        for(CoreBudgetItem item : budgetFormData.getCoreBudgetItemsList()) {
+        for(BudgetItem item : budgetItemList) {
 
             if(item.getItemMonetaryAmount() != null) {
                 BigDecimal monetaryAmount = multiplyMonetaryValueByTwelve(item.getItemMonetaryAmount());
-                budgetFormData.getCoreBudgetItemsList().get(index).setItemMonetaryAmount(monetaryAmount);
+                budgetItemList.get(index).setItemMonetaryAmount(monetaryAmount);
             } else {
-                throw new Exception("CoreBudgetItem MonetaryAmount is null.");
+                throw new BudgetItemsMissingException("BudgetItem monetaryAmount is null.");
             }
 
             index++;
         }
 
+        return budgetItemList;
     }
 
 }

@@ -22,9 +22,9 @@ public abstract class Budget {
     protected Date submittedOn;
 
     public Budget(String description, BigDecimal salary, Date submittedOn) {
-        this.description = description;
-        this.salary = salary;
-        this.submittedOn = submittedOn;
+        setDescription(description);;
+        setSalary(salary);
+        setSubmittedOn(submittedOn);
     }
 
     // TODO - build the budgetObject by passing in the form DTO to the buildBudget() method

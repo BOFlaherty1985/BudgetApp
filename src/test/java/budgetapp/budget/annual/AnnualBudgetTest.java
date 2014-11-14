@@ -4,6 +4,8 @@ import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.form.BudgetFormData;
 import main.java.budgetapp.budget.items.CoreBudgetItem;
+import main.java.budgetapp.budget.items.SocialBudgetItem;
+import main.java.budgetapp.exceptions.BudgetItemsMissingException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,18 +64,14 @@ public class AnnualBudgetTest {
 
     }
 
-    // TODO - Test that all methods within BudgetFormData are executed and valid values have been set. (not null and contain a value)
     @Test
     public void ensureSalaryHasBeenCalledOnFormObject() throws Exception {
-
         budget.buildBudget(budgetFormData);
         verify(budgetFormData, times(2)).getSalary();
-
     }
 
     @Test
     public void assertBudgetContainsSalaryValue() throws Exception {
-
         budget.buildBudget(budgetFormData);
         assertNotNull(budget.getSalary());
     }
@@ -97,7 +95,6 @@ public class AnnualBudgetTest {
 
         budget.buildBudget(budgetFormData);
         verify(budgetFormData, times(2)).getSubmittedOn();
-
     }
 
     @Test
@@ -105,7 +102,6 @@ public class AnnualBudgetTest {
 
         budget.buildBudget(budgetFormData);
         assertNotNull(budget.getSubmittedOn());
-
     }
 
     @Test
@@ -125,9 +121,8 @@ public class AnnualBudgetTest {
     @Test
     public void ensureCoreBudgetItemsHasBeenCalledOnFormObject() throws Exception {
         budget.buildBudget(budgetFormData);
-        verify(budgetFormData, times(3)).getCoreBudgetItemsList();
+        verify(budgetFormData, times(2)).getCoreBudgetItemsList();
     }
-
 
     @Test
     public void exceptionThrownIfCoreBudgetItemListIsNullWithinFormData() throws Exception {
@@ -250,7 +245,7 @@ public class AnnualBudgetTest {
     }
 
     @Test
-    public void ensureCoreBudgetItemsInBudgetContainsDifferentFormObjectTestThree() {
+    public void ensureCoreBudgetItemsInBudgetContainsDifferentValueFormObjectTestThree() {
 
         List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
         coreBudgetItemList.add(new CoreBudgetItem("Test Description", new BigDecimal("100")));
@@ -263,8 +258,6 @@ public class AnnualBudgetTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println(budget.toString());
 
         assertTrue(budget.getCoreBudgetItemList().get(0).getItemMonetaryAmount().intValue() != 100);
         assertTrue(budget.getCoreBudgetItemList().get(1).getItemMonetaryAmount().intValue() != 200);
@@ -303,12 +296,113 @@ public class AnnualBudgetTest {
 
         try {
             budget.buildBudget(budgetFormData);
-            fail("CoreBudgetItem MonetaryAmount is null.");
+            fail("BudgetItem monetaryAmount is null.");
         } catch (Exception e) {
-            assertEquals(e.getMessage(), "CoreBudgetItem MonetaryAmount is null.");
+            assertEquals(e.getMessage(), "BudgetItem monetaryAmount is null.");
         }
 
     }
+
+    @Test
+    public void ensureBudgetObjectSocialBudgetItemsIsNotNull() throws Exception {
+        budget.buildBudget(budgetFormData);
+        assertTrue(budget.getSocialBudgetItemList() != null);
+    }
+
+    @Test
+    public void ensureSocialBudgetItemsHasBeenCalledOnFormObject() throws Exception {
+        budget.buildBudget(budgetFormData);
+        verify(budgetFormData, times(2)).getSocialBudgetItemsList();
+    }
+
+    @Test
+    public void exceptionThrownIfFormDataSocialBudgetItemsListIsNull() {
+
+        when(budgetFormData.getSocialBudgetItemsList()).thenReturn(null);
+
+        try {
+            budget.buildBudget(budgetFormData);
+            fail("SocialBudgetItemsList is null.");
+        } catch (Exception e) {
+            System.out.println("SocialBudgetItemsList is null.");
+        }
+
+    }
+
+    @Test
+    public void throwExceptionIfSocialBudgetItemsDoesNotContainAValidMonetaryAmountTestOne() throws Exception {
+
+        List<SocialBudgetItem> socialBudgetItemsList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemsList.add(new SocialBudgetItem(new Date(), "Test Description #1", null));
+
+        when(budgetFormData.getSocialBudgetItemsList()).thenReturn(socialBudgetItemsList);
+
+        try {
+            budget.buildBudget(budgetFormData);
+            fail("BudgetItem monetaryAmount is null.");
+        } catch (BudgetItemsMissingException e) {
+            assertEquals("BudgetItem monetaryAmount is null.", e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void throwExceptionIfSocialBudgetItemsDoesNotContainAValidMonetaryAmountTestTwo() throws Exception {
+
+        List<SocialBudgetItem> socialBudgetItemsList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemsList.add(new SocialBudgetItem(new Date(), "Test Description #1", new BigDecimal("100")));
+        socialBudgetItemsList.add(new SocialBudgetItem(new Date(), "Test Description #1", null));
+
+        when(budgetFormData.getSocialBudgetItemsList()).thenReturn(socialBudgetItemsList);
+
+        try {
+            budget.buildBudget(budgetFormData);
+            fail("BudgetItem monetaryAmount is null.");
+        } catch (BudgetItemsMissingException e) {
+            assertEquals("BudgetItem monetaryAmount is null.", e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void ensureSocialBudgetItemsInBudgetContainsDifferentValueFormObjectTestOne() throws Exception {
+
+        List<SocialBudgetItem> socialBudgetItemsList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemsList.add(new SocialBudgetItem(new Date(), "Test Description #1", new BigDecimal("100")));
+
+        when(budgetFormData.getSocialBudgetItemsList()).thenReturn(socialBudgetItemsList);
+
+        budget.buildBudget(budgetFormData);
+        assertTrue(budget.getSocialBudgetItemList().get(0).getItemMonetaryAmount().intValue() != 100);
+    }
+
+
+    @Test
+    public void ensureSoreBudgetItemValueWithinBudgetIs12TimesTheValueInFormObjectTestOne() throws Exception {
+
+        List<SocialBudgetItem> socialBudgetItemsList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemsList.add(new SocialBudgetItem(new Date(), "Test Description #1", new BigDecimal("100")));
+
+        when(budgetFormData.getSocialBudgetItemsList()).thenReturn(socialBudgetItemsList);
+
+        budget.buildBudget(budgetFormData);
+        assertEquals(1200, budget.getSocialBudgetItemList().get(0).getItemMonetaryAmount().intValue());
+
+    }
+
+    @Test
+    public void ensureSoreBudgetItemValueWithinBudgetIs12TimesTheValueInFormObjectTestTwo() throws Exception {
+
+        List<SocialBudgetItem> socialBudgetItemsList = new ArrayList<SocialBudgetItem>();
+        socialBudgetItemsList.add(new SocialBudgetItem(new Date(), "Test Description #1", new BigDecimal("200")));
+
+        when(budgetFormData.getSocialBudgetItemsList()).thenReturn(socialBudgetItemsList);
+
+        budget.buildBudget(budgetFormData);
+        assertEquals(2400, budget.getSocialBudgetItemList().get(0).getItemMonetaryAmount().intValue());
+
+    }
+
 
 
 }
