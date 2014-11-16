@@ -23,8 +23,8 @@ public class MonthlyBudget extends Budget {
     @Override
     public void buildBudget(BudgetFormData budgetFormData) {
         // TODO - form object from the user to be passed into the buildBudget method to create the object.
-        this.setCoreBudgetItemList(null);
-        this.setSocialBudgetItemList(null);
+        setCoreBudgetItemList(null);
+        setSocialBudgetItemList(null);
 
     }
 

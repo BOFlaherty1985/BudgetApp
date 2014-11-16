@@ -394,4 +394,8 @@ public class BudgetCalculationTest {
         assertEquals(budgetBreakdown.getTotalMoneyAvailable(), new BigDecimal(BigInteger.ZERO));
     }
 
+    // TODO - create tests for total money available (weekly) when an Annual Budget is processed.
+    // Divide by 4 for monthly budget
+    // Divide by 52 for annual budget
+
 }

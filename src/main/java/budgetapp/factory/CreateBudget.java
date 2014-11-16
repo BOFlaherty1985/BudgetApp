@@ -3,8 +3,10 @@ package main.java.budgetapp.factory;
 import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.monthly.MonthlyBudget;
+import main.java.budgetapp.exceptions.InvalidBudgetTypeException;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -17,11 +19,25 @@ import java.util.Date;
 public class CreateBudget extends BudgetFactory {
 
     @Override
-    protected Budget createBudget(String budget_choice) {
-        // TODO - refactor budget object creation constructor input(s)
+    protected Budget createBudget(String budget_choice) throws Exception {
+
+        validateBudgetChoice(budget_choice);
+
         return (budget_choice.equals(ANNUAL_BUDGET)) ?
-                new AnnualBudget("annual budget", new BigDecimal("30000"), new Date()) :
-                new MonthlyBudget("monthly budget", new BigDecimal("20000"), new Date());
+                new AnnualBudget("Annual budget", new BigDecimal(BigInteger.ZERO), new Date()) :
+                new MonthlyBudget("Monthly budget", new BigDecimal(BigInteger.ZERO), new Date());
+    }
+
+    /**
+     * validate user requested budget type
+     *
+     * @param budget_choice
+     * @throws InvalidBudgetTypeException
+     */
+    private void validateBudgetChoice(String budget_choice) throws InvalidBudgetTypeException {
+        if(budget_choice != ANNUAL_BUDGET && budget_choice != MONTHLY_BUDGET) {
+            throw new InvalidBudgetTypeException("Invalid Budget Type.");
+        }
     }
 
 }

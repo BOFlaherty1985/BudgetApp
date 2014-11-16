@@ -20,13 +20,13 @@ public class CoreBudgetItem implements BudgetItem {
     }
 
     @Override
-    public void buildBudgetItem() {
-        // call CoreBudgetItemBuilder
+    public void setItemDescription(String description) {
+        this.description = description;
     }
 
     @Override
-    public void setItemDescription(String description) {
-        this.description = description;
+    public BigDecimal getItemDescription() {
+        return moneySpent;
     }
 
     @Override
@@ -37,14 +37,6 @@ public class CoreBudgetItem implements BudgetItem {
     @Override
     public BigDecimal getItemMonetaryAmount() {
         return moneySpent;
-    }
-
-    public BigDecimal getMoneySpent() {
-        return moneySpent;
-    }
-
-    public void setMoneySpent(BigDecimal moneySpent) {
-        this.moneySpent = moneySpent;
     }
 
     @Override

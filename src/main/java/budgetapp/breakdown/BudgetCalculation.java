@@ -124,6 +124,8 @@ public class BudgetCalculation {
             totalMoneyAvail = salary.subtract(totalAllItems);
 
             // divide totalMoneyAvail by 4 (weeks)
+            // TODO - logic needed to determine whether to divide by 4 weeks (monthly) or
+            // TODO - 52 weeks (annually)
             breakdown.setTotalMoneyAvailableWeekly(totalMoneyAvail.divide(NUMBER_OF_WEEKS));
         }
 

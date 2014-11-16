@@ -20,6 +20,8 @@ public abstract class Budget {
     protected String description;
     protected BigDecimal salary;
     protected Date submittedOn;
+    protected List<CoreBudgetItem> coreBudgetItemList;
+    protected List<SocialBudgetItem> socialBudgetItemList;
 
     public Budget(String description, BigDecimal salary, Date submittedOn) {
         setDescription(description);;
@@ -27,11 +29,8 @@ public abstract class Budget {
         setSubmittedOn(submittedOn);
     }
 
-    // TODO - build the budgetObject by passing in the form DTO to the buildBudget() method
     public abstract void buildBudget(BudgetFormData budgetFormData) throws Exception;
 
-    protected List<CoreBudgetItem> coreBudgetItemList;
-    protected List<SocialBudgetItem> socialBudgetItemList;
 
     public String getDescription() {
         return description;

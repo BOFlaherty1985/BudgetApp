@@ -5,8 +5,15 @@ import main.java.budgetapp.breakdown.BudgetCalculation;
 import main.java.budgetapp.breakdown.CalculateBudgetBreakdown;
 import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.form.BudgetFormData;
+import main.java.budgetapp.budget.items.CoreBudgetItem;
+import main.java.budgetapp.budget.items.SocialBudgetItem;
 import main.java.budgetapp.factory.BudgetFactory;
 import main.java.budgetapp.factory.CreateBudget;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Client for Budget Application.
@@ -19,9 +26,23 @@ public class BudgetClient {
 
     private static BudgetFactory budgetFactory = new CreateBudget();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         BudgetFormData formData = new BudgetFormData();
+        formData.setSubmittedOn(new Date());
+        formData.setSalary(new BigDecimal("2000"));
+
+        List<CoreBudgetItem> coreBudgetItemList = new ArrayList<CoreBudgetItem>();
+        coreBudgetItemList.add(new CoreBudgetItem("Rent", new BigDecimal("665")));
+        coreBudgetItemList.add(new CoreBudgetItem("Council Tax", new BigDecimal("65")));
+        // set core budget items
+        formData.setCoreBudgetItemsList(coreBudgetItemList);
+
+        List<SocialBudgetItem> socialBudgetItems = new ArrayList<SocialBudgetItem>();
+        socialBudgetItems.add(new SocialBudgetItem(new Date(), "BOF Birthday", new BigDecimal("120")));
+        socialBudgetItems.add(new SocialBudgetItem(new Date(), "Essex Reunion", new BigDecimal("120")));
+        // set social budget items
+        formData.setSocialBudgetItemsList(socialBudgetItems);
 
         Budget budget = budgetFactory.requestBudgetByType("ANNUAL");
 
@@ -36,11 +57,15 @@ public class BudgetClient {
         CalculateBudgetBreakdown breakdown = new CalculateBudgetBreakdown();
         breakdown.setBudgetCalculation(new BudgetCalculation());
 
+        BudgetBreakdown budgetBreakdown = null;
+
         try {
-            breakdown.calculateBreakdown(budget, new BudgetBreakdown());
+            budgetBreakdown = breakdown.calculateBreakdown(budget, new BudgetBreakdown());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println(budgetBreakdown.toString());
 
     }
 

@@ -23,13 +23,13 @@ public class SocialBudgetItem implements BudgetItem {
     }
 
     @Override
-    public void buildBudgetItem() {
-        // call SocialBudgetItemBuilder
+    public void setItemDescription(String description) {
+        this.moneySpent = moneySpent;
     }
 
     @Override
-    public void setItemDescription(String description) {
-        this.description = description;
+    public BigDecimal getItemDescription() {
+        return moneySpent;
     }
 
     @Override
@@ -39,10 +39,6 @@ public class SocialBudgetItem implements BudgetItem {
 
     @Override
     public BigDecimal getItemMonetaryAmount() {
-        return moneySpent;
-    }
-
-    public BigDecimal getMoneySpent() {
         return moneySpent;
     }
 

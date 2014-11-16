@@ -11,8 +11,8 @@ import java.math.BigDecimal;
  */
 public interface BudgetItem {
 
-    void buildBudgetItem();
     void setItemDescription(String description);
+    BigDecimal getItemDescription();
     void setItemMonetaryAmount(BigDecimal moneySpent);
     BigDecimal getItemMonetaryAmount();
     public String toString();
