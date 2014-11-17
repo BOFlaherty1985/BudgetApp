@@ -55,9 +55,8 @@ public class AnnualBudget extends Budget {
                 throw new Exception();
             }
 
-            // TODO - use budget items exception
             if(budgetFormData.getCoreBudgetItemsList() == null || budgetFormData.getSocialBudgetItemsList() == null) {
-                throw new Exception();
+                throw new BudgetItemsMissingException("BudgetItems");
             }
 
         }

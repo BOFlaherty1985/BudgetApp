@@ -7,6 +7,7 @@ import main.java.budgetapp.exceptions.BudgetItemsMissingException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -20,7 +21,8 @@ public class BudgetCalculation {
 
     private static final String ANNUAL = "ANNUAL";
     private static final String MONTHLY = "MONTHLY";
-    private static final BigDecimal NUMBER_OF_WEEKS = new BigDecimal("4");
+    private static final BigDecimal MONTHLY_DIVISIBLE_WEEKS = new BigDecimal("4");
+    private static final BigDecimal ANNUAL_DIVISIBLE_WEEKS = new BigDecimal("52");
 
     /**
      * process budget type
@@ -118,20 +120,26 @@ public class BudgetCalculation {
                                                                  BigDecimal totalAllItems) {
 
         BigDecimal totalMoneyAvail = new BigDecimal(BigInteger.ZERO);
+        BigDecimal totalMoneyAvailPerWeek = new BigDecimal(BigInteger.ZERO);
 
         if(salary != null && totalAllItems != null) {
             // calculate totalMoneyAvail (salary - totalAllItems)
             totalMoneyAvail = salary.subtract(totalAllItems);
 
-            // divide totalMoneyAvail by 4 (weeks)
-            // TODO - logic needed to determine whether to divide by 4 weeks (monthly) or
-            // TODO - 52 weeks (annually)
-            breakdown.setTotalMoneyAvailableWeekly(totalMoneyAvail.divide(NUMBER_OF_WEEKS));
+            // calculate totalMoneyAvailableWeekly
+            totalMoneyAvailPerWeek = calculateAvailableWeeklyTotal(breakdown, totalMoneyAvail);
         }
 
+        breakdown.setTotalMoneyAvailableWeekly(totalMoneyAvailPerWeek);
         breakdown.setTotalMoneyAvailable(totalMoneyAvail);
 
         return breakdown;
+    }
+
+    private BigDecimal calculateAvailableWeeklyTotal(BudgetBreakdown breakdown, BigDecimal totalMoneyAvail) {
+        return (breakdown.getBudgetType().equals(ANNUAL)) ?
+                totalMoneyAvail.divide((ANNUAL_DIVISIBLE_WEEKS), 2, RoundingMode.HALF_UP) :
+                totalMoneyAvail.divide((MONTHLY_DIVISIBLE_WEEKS), 2, RoundingMode.HALF_UP);
     }
 
 }
