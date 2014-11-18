@@ -4,8 +4,8 @@ import main.java.budgetapp.budget.Budget;
 import main.java.budgetapp.budget.annual.AnnualBudget;
 import main.java.budgetapp.budget.monthly.MonthlyBudget;
 import main.java.budgetapp.exceptions.InvalidBudgetTypeException;
-import main.java.budgetapp.factory.BudgetFactory;
-import main.java.budgetapp.factory.CreateBudget;
+import main.java.budgetapp.factory.budget.BudgetFactory;
+import main.java.budgetapp.factory.budget.CreateBudget;
 import org.junit.Test;
 
 import java.math.BigDecimal;
