@@ -45,15 +45,18 @@ public class BuildGraph {
 
         if(budgetGraph != null) {
 
+            // TODO - need to decide what we are building in order to pass into createGraph()
+            // TODO - 19/11/2014 - Build BudgetGraph object
+
             // 2. set initial values on the object (constructor?)
             budgetGraph.initialise(graphProperties);
             // 3. Based on the value of graphProperties.getTypeOfGraph decide which DataSource class to use
             // 4. verify that the call to the DataSource.buildDataSource has been made
             determineDataset(graphProperties);
             // 5. graphLegendRequired() has been called
-            isGraphLegendRequired(graphProperties, budgetGraph);
+            isGraphLegendRequired(graphProperties, budgetGraph); // TODO - set budgetGraph value based on value in graphProperties
             //  6. verify that CreateGraph has been called
-            budgetGraph.createGraph(graphProperties);
+            budgetGraph.createGraph(graphProperties);  // TODO - pass in BudgetGraph object instead of graphProperties
 
             // TODO - createGraph should return type of Boolean
             result = true;

@@ -21,11 +21,9 @@ public class GraphFactory {
 
     public BudgetGraph buildGraph(GraphProperties graphProperties) throws Exception {
 
-        BudgetGraph graph = null;
-
         validate(graphProperties);
 
-        return determineTypeOfGraph(graphProperties, graph);
+        return determineTypeOfGraph(graphProperties);
     }
 
     private void validate(GraphProperties graphProperties) throws GraphPropertiesNullException {
@@ -34,7 +32,9 @@ public class GraphFactory {
         }
     }
 
-    private BudgetGraph determineTypeOfGraph(GraphProperties graphProperties, BudgetGraph graph) {
+    private BudgetGraph determineTypeOfGraph(GraphProperties graphProperties) {
+
+        BudgetGraph graph = null;
 
         switch (graphProperties.getTypeOfGraph()) {
             case PIE_GRAPH:
