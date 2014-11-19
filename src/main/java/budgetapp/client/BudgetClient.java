@@ -9,7 +9,6 @@ import main.java.budgetapp.budget.items.CoreBudgetItem;
 import main.java.budgetapp.budget.items.SocialBudgetItem;
 import main.java.budgetapp.factory.budget.BudgetFactory;
 import main.java.budgetapp.factory.budget.CreateBudget;
-import main.java.budgetapp.factory.graph.GraphFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import java.util.List;
 public class BudgetClient {
 
     private static BudgetFactory budgetFactory = new CreateBudget();
-    private static GraphFactory graphFactory = new GraphFactory();
 
     public static void main(String[] args) throws Exception {
 
