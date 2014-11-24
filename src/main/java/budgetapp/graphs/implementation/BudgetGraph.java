@@ -1,6 +1,7 @@
 package main.java.budgetapp.graphs.implementation;
 
 import main.java.budgetapp.graphs.properties.GraphProperties;
+import org.jfree.data.general.AbstractDataset;
 
 /**
  * Budget Graph
@@ -17,6 +18,8 @@ public interface BudgetGraph {
     // TODO - candidate to be moved into an abstract class?
     void isGraphLegendRequired(GraphProperties graphProperties);
 
-    void createGraph(GraphProperties graphProperties);
+    <T extends AbstractDataset> void setDataset(T dataset);
+
+    <T> void createGraph(T budgetGraph) throws Exception;
 
 }

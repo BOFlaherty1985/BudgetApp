@@ -1,9 +1,11 @@
 package test.java.budgetapp.factory.graph;
 
+import main.java.budgetapp.exceptions.BudgetGraphIsInvalidException;
 import main.java.budgetapp.exceptions.GraphDatasetNullException;
 import main.java.budgetapp.exceptions.GraphPropertiesNullException;
 import main.java.budgetapp.factory.graph.BuildGraph;
 import main.java.budgetapp.factory.graph.GraphFactory;
+import main.java.budgetapp.graphs.GraphData;
 import main.java.budgetapp.graphs.dataset.BudgetCategoryDataset;
 import main.java.budgetapp.graphs.dataset.BudgetPieDataset;
 import main.java.budgetapp.graphs.implementation.BudgetCategoryGraph;
@@ -13,6 +15,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -34,6 +39,8 @@ public class BuildGraphTest {
     private BudgetPieDataset pieDataset;
     private BudgetCategoryGraph budgetCategoryGraph;
     private BudgetCategoryDataset categoryDataset;
+
+    private List<GraphData> graphDataList = new ArrayList<GraphData>();
 
     @Before
     public void setUp() {
@@ -60,14 +67,14 @@ public class BuildGraphTest {
     @Test(expected = GraphPropertiesNullException.class)
     public void throwExceptionWhenGraphPropertiesIsNull() throws Exception {
 
-       buildGraph.generateGraph(null);
+       buildGraph.generateGraph(null, graphDataList);
 
     }
 
     @Test
     public void assertGenerateGraphReturnsABooleanReturnType() throws Exception {
 
-        boolean result = buildGraph.generateGraph(graphProperties);
+        boolean result = buildGraph.generateGraph(graphProperties, graphDataList);
         assertEquals("Result is instanceOf Boolean", false, result);
 
     }
@@ -77,7 +84,7 @@ public class BuildGraphTest {
 
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetPieGraph);
 
-        boolean result = buildGraph.generateGraph(graphProperties);
+        boolean result = buildGraph.generateGraph(graphProperties, graphDataList);
         assertEquals("Default result is equal to false.", true, result);
 
     }
@@ -85,7 +92,7 @@ public class BuildGraphTest {
     @Test
     public void verifyGraphFactoryIsCalled() throws Exception {
 
-        buildGraph.generateGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
         verify(graphFactory, times(1)).buildGraph(graphProperties);
 
     }
@@ -95,7 +102,7 @@ public class BuildGraphTest {
 
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetPieGraph);
 
-        buildGraph.generateGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
         verify(budgetPieGraph, times(1)).initialise(graphProperties);
 
     }
@@ -105,7 +112,7 @@ public class BuildGraphTest {
 
         when(graphFactory.buildGraph(graphProperties)).thenReturn(null);
 
-        buildGraph.generateGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
         verify(budgetPieGraph, times(0)).initialise(graphProperties);
 
     }
@@ -115,7 +122,7 @@ public class BuildGraphTest {
 
         buildGraph.setPieDataset(null);
         buildGraph.setCategoryDataset(categoryDataset);
-        buildGraph.generateGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
 
     }
 
@@ -124,7 +131,7 @@ public class BuildGraphTest {
 
         buildGraph.setPieDataset(pieDataset);
         buildGraph.setCategoryDataset(null);
-        buildGraph.generateGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
 
     }
 
@@ -135,7 +142,7 @@ public class BuildGraphTest {
         buildGraph.setCategoryDataset(categoryDataset);
 
         try {
-            buildGraph.generateGraph(graphProperties);
+            buildGraph.generateGraph(graphProperties, graphDataList);
             fail("GraphDataSet is null");
         } catch (Exception e) {
             assertEquals("Graph Dataset must not be null.", "Graph Dataset must not be null.", e.getMessage());
@@ -150,7 +157,7 @@ public class BuildGraphTest {
         buildGraph.setCategoryDataset(null);
 
         try {
-            buildGraph.generateGraph(graphProperties);
+            buildGraph.generateGraph(graphProperties, graphDataList);
             fail("GraphDataSet is null");
         } catch (Exception e) {
             assertEquals("Graph Dataset must not be null.", "Graph Dataset must not be null.", e.getMessage());
@@ -164,8 +171,8 @@ public class BuildGraphTest {
         when(graphProperties.getTypeOfGraph()).thenReturn('p');
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetPieGraph);
 
-        buildGraph.generateGraph(graphProperties);
-        verify(pieDataset, times(1)).buildDataset();
+        buildGraph.generateGraph(graphProperties, graphDataList);
+        verify(pieDataset, times(1)).buildDataset(new ArrayList<GraphData>());
 
     }
 
@@ -175,8 +182,8 @@ public class BuildGraphTest {
         when(graphProperties.getTypeOfGraph()).thenReturn('l');
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetCategoryGraph);
 
-        buildGraph.generateGraph(graphProperties);
-        verify(categoryDataset, times(1)).buildDataset();
+        buildGraph.generateGraph(graphProperties, graphDataList);
+        verify(categoryDataset, times(1)).buildDataset(new ArrayList<GraphData>());
 
     }
 
@@ -186,8 +193,8 @@ public class BuildGraphTest {
         when(graphProperties.getTypeOfGraph()).thenReturn('b');
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetCategoryGraph);
 
-        buildGraph.generateGraph(graphProperties);
-        verify(categoryDataset, times(1)).buildDataset();
+        buildGraph.generateGraph(graphProperties, graphDataList);
+        verify(categoryDataset, times(1)).buildDataset(new ArrayList<GraphData>());
 
     }
 
@@ -196,7 +203,7 @@ public class BuildGraphTest {
 
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetPieGraph);
 
-        buildGraph.generateGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
         verify(budgetPieGraph, times(1)).isGraphLegendRequired(graphProperties);
 
     }
@@ -206,18 +213,18 @@ public class BuildGraphTest {
 
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetCategoryGraph);
 
-        buildGraph.generateGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
         verify(budgetCategoryGraph, times(1)).isGraphLegendRequired(graphProperties);
 
     }
 
     @Test
-    public void verifyCreateGraphMethodIsCalledOnBudgetPieGraphImplementation() throws Exception {
+    public void verifyCreateGraphMethodIsCalledOnBudgetPieGraphImplementation() throws Exception, BudgetGraphIsInvalidException {
 
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetPieGraph);
 
-        buildGraph.generateGraph(graphProperties);
-        verify(budgetPieGraph, times(1)).createGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
+        verify(budgetPieGraph, times(1)).createGraph(budgetPieGraph);
 
     }
 
@@ -226,8 +233,8 @@ public class BuildGraphTest {
 
         when(graphFactory.buildGraph(graphProperties)).thenReturn(budgetCategoryGraph);
 
-        buildGraph.generateGraph(graphProperties);
-        verify(budgetCategoryGraph, times(1)).createGraph(graphProperties);
+        buildGraph.generateGraph(graphProperties, graphDataList);
+        verify(budgetCategoryGraph, times(1)).createGraph(budgetCategoryGraph);
 
     }
 

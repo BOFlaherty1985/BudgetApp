@@ -1,5 +1,10 @@
 package main.java.budgetapp.graphs.dataset;
 
+import main.java.budgetapp.graphs.GraphData;
+import org.jfree.data.general.AbstractDataset;
+
+import java.util.List;
+
 /**
  * Budget Dataset interface
  *
@@ -9,6 +14,6 @@ package main.java.budgetapp.graphs.dataset;
  */
 public interface BudgetDataset {
 
-    BudgetDataset buildDataset();
+    <T extends AbstractDataset> T buildDataset(List<GraphData> graphDataList) throws Exception;
 
 }

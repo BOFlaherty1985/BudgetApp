@@ -3,11 +3,14 @@ package main.java.budgetapp.factory.graph;
 import main.java.budgetapp.exceptions.BudgetGraphNullException;
 import main.java.budgetapp.exceptions.GraphDatasetNullException;
 import main.java.budgetapp.exceptions.GraphPropertiesNullException;
+import main.java.budgetapp.graphs.GraphData;
 import main.java.budgetapp.graphs.dataset.BudgetCategoryDataset;
-import main.java.budgetapp.graphs.dataset.BudgetDataset;
 import main.java.budgetapp.graphs.dataset.BudgetPieDataset;
 import main.java.budgetapp.graphs.implementation.BudgetGraph;
 import main.java.budgetapp.graphs.properties.GraphProperties;
+import org.jfree.data.general.AbstractDataset;
+
+import java.util.List;
 
 /**
  * Build Graph
@@ -30,10 +33,11 @@ public class BuildGraph {
      * build an implementation of BudgetGraph
      *
      * @param graphProperties
+     * @param graphDataList
      * @return
      * @throws Exception
      */
-    public boolean generateGraph(GraphProperties graphProperties) throws Exception {
+    public boolean generateGraph(GraphProperties graphProperties, List<GraphData> graphDataList) throws Exception {
 
         boolean result;
 
@@ -45,18 +49,16 @@ public class BuildGraph {
 
         if(budgetGraph != null) {
 
-            // TODO - need to decide what we are building in order to pass into createGraph()
-            // TODO - 19/11/2014 - Build BudgetGraph object
-
-            // 2. set initial values on the object (constructor?)
+            // 2. set initial values on the object
             budgetGraph.initialise(graphProperties);
             // 3. Based on the value of graphProperties.getTypeOfGraph decide which DataSource class to use
             // 4. verify that the call to the DataSource.buildDataSource has been made
-            determineDataset(graphProperties);
+            budgetGraph.setDataset(determineDataset(graphProperties, graphDataList));
             // 5. graphLegendRequired() has been called
-            isGraphLegendRequired(graphProperties, budgetGraph); // TODO - set budgetGraph value based on value in graphProperties
+            budgetGraph.isGraphLegendRequired(graphProperties);
             //  6. verify that CreateGraph has been called
-            budgetGraph.createGraph(graphProperties);  // TODO - pass in BudgetGraph object instead of graphProperties
+
+            budgetGraph.createGraph(budgetGraph);
 
             // TODO - createGraph should return type of Boolean
             result = true;
@@ -81,7 +83,7 @@ public class BuildGraph {
     private boolean throwBudgetGraphNullException() {
 
         try {
-            throw new BudgetGraphNullException();
+            throw new BudgetGraphNullException("BudgetGraph is null.");
         } catch (BudgetGraphNullException e) {
             System.out.println("exception thrown");
         }
@@ -89,14 +91,12 @@ public class BuildGraph {
         return false;
     }
 
-    private BudgetDataset determineDataset(GraphProperties graphProperties) {
-        return (graphProperties.getTypeOfGraph() == PIE_GRAPH) ? pieDataset.buildDataset() :
-                ((graphProperties.getTypeOfGraph() == LINE_GRAPH || graphProperties.getTypeOfGraph() == BAR_GRAPH) ? categoryDataset.buildDataset() : null);
+    private AbstractDataset determineDataset(GraphProperties graphProperties, List<GraphData> graphDataList) throws Exception {
+        return (graphProperties.getTypeOfGraph() == PIE_GRAPH) ? pieDataset.buildDataset(graphDataList) :
+                ((graphProperties.getTypeOfGraph() == LINE_GRAPH || graphProperties.getTypeOfGraph() == BAR_GRAPH) ?
+                        categoryDataset.buildDataset(graphDataList) : null);
     }
 
-    private void isGraphLegendRequired(GraphProperties graphProperties, BudgetGraph budgetGraph) {
-        budgetGraph.isGraphLegendRequired(graphProperties);
-    }
 
     public void setGraphFactory(GraphFactory graphFactory) {
         this.graphFactory = graphFactory;

@@ -1,5 +1,10 @@
 package main.java.budgetapp.graphs.dataset;
 
+import main.java.budgetapp.graphs.GraphData;
+import org.jfree.data.general.AbstractDataset;
+
+import java.util.List;
+
 /**
  * Description Here
  *
@@ -10,8 +15,7 @@ package main.java.budgetapp.graphs.dataset;
 public class BudgetCategoryDataset implements BudgetDataset {
 
     @Override
-    public BudgetDataset buildDataset() {
+    public <T extends AbstractDataset> T buildDataset(List<GraphData> graphDataList) {
         return null;
     }
-
 }

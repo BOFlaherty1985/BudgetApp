@@ -1,6 +1,7 @@
 package main.java.budgetapp.graphs.implementation;
 
 import main.java.budgetapp.graphs.properties.GraphProperties;
+import org.jfree.data.general.AbstractDataset;
 
 /**
  *  Category Graph Implementation
@@ -22,7 +23,14 @@ public class BudgetCategoryGraph implements BudgetGraph {
     }
 
     @Override
-    public void createGraph(GraphProperties graphProperties) {
+    public <T extends AbstractDataset> void setDataset(T dataset) {
 
     }
+
+    @Override
+    public <T> void createGraph(T budgetGraph) {
+
+    }
+
+
 }

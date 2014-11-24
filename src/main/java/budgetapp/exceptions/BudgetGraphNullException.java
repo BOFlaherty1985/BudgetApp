@@ -8,4 +8,9 @@ package main.java.budgetapp.exceptions;
  * @project BudgetApp
  */
 public class BudgetGraphNullException extends Exception {
+
+    public BudgetGraphNullException(String message) {
+        super(message);
+    }
+
 }

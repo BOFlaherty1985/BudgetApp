@@ -9,6 +9,12 @@ import main.java.budgetapp.budget.items.CoreBudgetItem;
 import main.java.budgetapp.budget.items.SocialBudgetItem;
 import main.java.budgetapp.factory.budget.BudgetFactory;
 import main.java.budgetapp.factory.budget.CreateBudget;
+import main.java.budgetapp.factory.graph.BuildGraph;
+import main.java.budgetapp.factory.graph.GraphFactory;
+import main.java.budgetapp.graphs.GraphData;
+import main.java.budgetapp.graphs.dataset.BudgetCategoryDataset;
+import main.java.budgetapp.graphs.dataset.BudgetPieDataset;
+import main.java.budgetapp.graphs.properties.GraphProperties;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -65,8 +71,31 @@ public class BudgetClient {
             e.printStackTrace();
         }
 
-        System.out.println(budgetBreakdown.toString());
+        BuildGraph buildGraph = new BuildGraph();
+        buildGraph.setGraphFactory(new GraphFactory());
+        buildGraph.setPieDataset(new BudgetPieDataset());
+        buildGraph.setCategoryDataset(new BudgetCategoryDataset());
 
+        GraphProperties properties = new GraphProperties();
+        properties.setTypeOfGraph('p');
+        properties.setTitle("Pie Chart Example One");
+        properties.setLegendRequired(true);
+        properties.setRequiredSize("LARGE");
+
+        List<GraphData> graphDataList = new ArrayList<GraphData>();
+        graphDataList.add(createGraphData("Pie Description 1", new BigDecimal(45)));
+        graphDataList.add(createGraphData("Pie Description 2", new BigDecimal(127)));
+
+        buildGraph.generateGraph(properties, graphDataList);
+
+    }
+
+    private static GraphData createGraphData(String description, BigDecimal value) {
+        GraphData graphData = new GraphData();
+        graphData.setDescription(description);
+        graphData.setValue(value);
+
+        return graphData;
     }
 
 }
