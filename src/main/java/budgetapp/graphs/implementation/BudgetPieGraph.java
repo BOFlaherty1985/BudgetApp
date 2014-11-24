@@ -11,6 +11,8 @@ import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.PieDataset;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Pie Graph Implementation
@@ -25,6 +27,8 @@ public class BudgetPieGraph implements BudgetGraph {
     private String requiredSize;
     private boolean legendRequired;
     private PieDataset dataset;
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyySS");
 
     @Override
     public void initialise(GraphProperties graphProperties) {
@@ -54,7 +58,8 @@ public class BudgetPieGraph implements BudgetGraph {
 
             JFreeChart pieChart = createPieChart(pieGraph);
 
-            ChartUtilities.saveChartAsJPEG(new File("C:\\budgetGraph.jpg"),
+            ChartUtilities.saveChartAsJPEG(new File("D:\\Build_WAR\\BudgetApp\\src\\main\\webapp\\graphs\\pie\\"+ sdf.format(new Date())
+                    + "_Pie.jpg"),
                     pieChart,
                     determineGraphWidth(pieGraph.getRequiredSize()),
                     determineGraphHeight(pieGraph.getRequiredSize()));

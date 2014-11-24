@@ -71,6 +71,8 @@ public class BudgetClient {
             e.printStackTrace();
         }
 
+        System.out.println(budgetBreakdown.toString());
+
         BuildGraph buildGraph = new BuildGraph();
         buildGraph.setGraphFactory(new GraphFactory());
         buildGraph.setPieDataset(new BudgetPieDataset());
@@ -78,13 +80,13 @@ public class BudgetClient {
 
         GraphProperties properties = new GraphProperties();
         properties.setTypeOfGraph('p');
-        properties.setTitle("Pie Chart Example One");
+        properties.setTitle("Budget Items vs. Money Available");
         properties.setLegendRequired(true);
         properties.setRequiredSize("LARGE");
 
         List<GraphData> graphDataList = new ArrayList<GraphData>();
-        graphDataList.add(createGraphData("Pie Description 1", new BigDecimal(45)));
-        graphDataList.add(createGraphData("Pie Description 2", new BigDecimal(127)));
+        graphDataList.add(createGraphData("Total Budget Items", budgetBreakdown.getTotalOfAllBudgetItems()));
+        graphDataList.add(createGraphData("Money Available", budgetBreakdown.getTotalMoneyAvailable()));
 
         buildGraph.generateGraph(properties, graphDataList);
 

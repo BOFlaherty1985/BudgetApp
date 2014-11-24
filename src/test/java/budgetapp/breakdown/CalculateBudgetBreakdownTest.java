@@ -193,8 +193,6 @@ public class CalculateBudgetBreakdownTest {
 
     }
 
-    // TODO - validate that a valid BudgetBreakdown has been returned
-
     // testing specific configuration methods.
     private AnnualBudget createAnnualBudget(String description, BigDecimal salary) {
         return new AnnualBudget(description, salary, new Date());

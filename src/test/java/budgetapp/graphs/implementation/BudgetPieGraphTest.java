@@ -69,7 +69,6 @@ public class BudgetPieGraphTest {
         when(graphProperties.getTitle()).thenReturn("Graph Test #1");
         when(graphProperties.getRequiredSize()).thenReturn("");
 
-
         budgetPieGraph.initialise(graphProperties);
         assertEquals("BudgetPieGraph title is equal to Graph Test #1", graphProperties.getTitle(),
                 budgetPieGraph.getTitle());
@@ -113,7 +112,6 @@ public class BudgetPieGraphTest {
         assert width/height are retruend from Enum based on the requiredSize value
 
      */
-
     @Test(expected = BudgetGraphNullException.class)
     public void throwBudgetGraphIsNullExceptionWhenObjectIsPassedInToCreateGraphAsNull() throws Exception {
 

@@ -85,7 +85,7 @@ public class BuildGraph {
         try {
             throw new BudgetGraphNullException("BudgetGraph is null.");
         } catch (BudgetGraphNullException e) {
-            System.out.println("exception thrown");
+            e.printStackTrace();
         }
 
         return false;
