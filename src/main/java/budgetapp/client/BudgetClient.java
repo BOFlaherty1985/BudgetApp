@@ -9,12 +9,6 @@ import main.java.budgetapp.budget.items.CoreBudgetItem;
 import main.java.budgetapp.budget.items.SocialBudgetItem;
 import main.java.budgetapp.factory.budget.BudgetFactory;
 import main.java.budgetapp.factory.budget.CreateBudget;
-import main.java.budgetapp.factory.graph.BuildGraph;
-import main.java.budgetapp.factory.graph.GraphFactory;
-import main.java.budgetapp.graphs.GraphData;
-import main.java.budgetapp.graphs.dataset.BudgetCategoryDataset;
-import main.java.budgetapp.graphs.dataset.BudgetPieDataset;
-import main.java.budgetapp.graphs.properties.GraphProperties;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -73,31 +67,6 @@ public class BudgetClient {
 
         System.out.println(budgetBreakdown.toString());
 
-        BuildGraph buildGraph = new BuildGraph();
-        buildGraph.setGraphFactory(new GraphFactory());
-        buildGraph.setPieDataset(new BudgetPieDataset());
-        buildGraph.setCategoryDataset(new BudgetCategoryDataset());
-
-        GraphProperties properties = new GraphProperties();
-        properties.setTypeOfGraph('p');
-        properties.setTitle("Budget Items vs. Money Available");
-        properties.setLegendRequired(true);
-        properties.setRequiredSize("LARGE");
-
-        List<GraphData> graphDataList = new ArrayList<GraphData>();
-        graphDataList.add(createGraphData("Total Budget Items", budgetBreakdown.getTotalOfAllBudgetItems()));
-        graphDataList.add(createGraphData("Money Available", budgetBreakdown.getTotalMoneyAvailable()));
-
-        buildGraph.generateGraph(properties, graphDataList);
-
-    }
-
-    private static GraphData createGraphData(String description, BigDecimal value) {
-        GraphData graphData = new GraphData();
-        graphData.setDescription(description);
-        graphData.setValue(value);
-
-        return graphData;
     }
 
 }
